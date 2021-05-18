@@ -1,11 +1,13 @@
 # QuotesApp
 
-A beautiful Quotes App where you can read and save quotes.
-
 <img alt = "QuotesApp Logo" src="https://raw.githubusercontent.com/GouravKhunger/QuotesApp/main/images/logo.png" height="150px" width="150px" align="right"/>
 
+A beautiful Quotes App where you can read and save quotes.
+
 This repository contains source code of a Quotes app, which helps you stay motivated by providing best picked quotes
-stated by famous personalities. This whole app uses [zen quotes](https://zenquotes.io) api, for retrieving quotes.
+stated by famous personalities. This app uses [zen quotes](https://zenquotes.io) api, for retrieving quotes.
+
+[Download](https://github.com/GouravKhunger/QuotesApp/releases/latest) the latest `apk` file of this project and do provide feedback 😀
 
 # Screenshots
 Here are some screenshots from the app:
