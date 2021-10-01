@@ -92,6 +92,7 @@ class QuotesActivity : AppCompatActivity() {
         if (!atHome) {
             backToQuotePage.visibility = View.GONE
             myBookmarksImgBtn.visibility = View.VISIBLE
+	    activity_title.text = resources.getText(R.string.app_name)
             atHome = true
         }
     }
