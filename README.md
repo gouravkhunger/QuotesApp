@@ -1,4 +1,9 @@
-# QuotesApp
+
+<h1 align="center"> QuotesApp </h1>
+
+![Android](https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white)
+![Kotlin](https://img.shields.io/badge/Kotlin-0095D5?&style=for-the-badge&logo=kotlin&logoColor=white)
+[![license](https://img.shields.io/github/license/gursi26/virtual_drawing_board.svg?style=flat-square)](https://github.com/gouravkhunger/QuotesApp/blob/main/LICENSE)
 
 <img alt = "QuotesApp Logo" src="https://raw.githubusercontent.com/GouravKhunger/QuotesApp/main/images/logo.png" height="150px" width="150px" align="right"/>
 
