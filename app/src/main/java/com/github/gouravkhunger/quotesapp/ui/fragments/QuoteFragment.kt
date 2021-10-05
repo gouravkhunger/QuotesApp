@@ -68,10 +68,13 @@ class QuoteFragment : Fragment(R.layout.fragment_quote) {
 
 
         shareQuote.setOnClickListener {
+            shareQuote.isVisible = false
             ShareUtil.share(
                 quoteCard,
                 requireContext(),
-            )
+            ) {
+                shareQuote.isVisible = true
+            }
         }
 
 

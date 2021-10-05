@@ -15,8 +15,9 @@ object ShareUtil {
     fun share(
         view: View,
         context: Context,
-
+        onShared: () -> Unit
         ) {
+
         val bitmap: Bitmap = view.drawToBitmap()
         var imageUri: Uri? = null
         val file: File?
@@ -46,7 +47,8 @@ object ShareUtil {
         intent.putExtra(Intent.EXTRA_STREAM, imageUri)
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         intent.type = "image/jpg"
-        context.startActivity(Intent.createChooser(intent, "Send email using"))
+        context.startActivity(Intent.createChooser(intent, "Send Quote Using"))
+        onShared()
     }
 
 }

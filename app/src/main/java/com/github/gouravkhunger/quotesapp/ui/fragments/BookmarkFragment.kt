@@ -137,8 +137,8 @@ class BookmarkFragment : Fragment(R.layout.fragment_bookmarks), SavedQuotesAdapt
         }
     }
 
-    override fun onShareClicked(view: View) {
-        ShareUtil.share(view, requireContext())
+    override fun onShareClicked(view: View, onShared: () -> Unit) {
+        ShareUtil.share(view = view, context = requireContext(), onShared = onShared)
     }
 
 }

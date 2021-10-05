@@ -27,27 +27,20 @@ package com.github.gouravkhunger.quotesapp.ui.adapters
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.github.gouravkhunger.quotesapp.R
 import com.github.gouravkhunger.quotesapp.models.Quote
 import kotlinx.android.synthetic.main.quote_item.view.*
-import android.graphics.drawable.Drawable
-
-import android.graphics.Bitmap
-
-import android.content.Intent
-
-import androidx.core.content.FileProvider
-import java.lang.Exception
 
 
 // Adapter of RecyclerView present in Bookmarked Quotes Fragment
 class SavedQuotesAdapter(val clickListener: OnClick) : RecyclerView.Adapter<SavedQuotesAdapter.QuoteViewHolder>() {
 
     interface OnClick{
-        fun onShareClicked(view:View)
+        fun onShareClicked(view: View, onShared: () -> Unit)
     }
     inner class QuoteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
@@ -95,7 +88,10 @@ class SavedQuotesAdapter(val clickListener: OnClick) : RecyclerView.Adapter<Save
 
             rvQuoteLoading.visibility = View.GONE
             shareQuote.setOnClickListener {
-                clickListener.onShareClicked(holder.itemView)
+                shareQuote.isVisible = false
+                clickListener.onShareClicked(view = holder.itemView, onShared = {
+                    shareQuote.isVisible = true
+                })
             }
             // onLongClick Listner definition
             setOnLongClickListener {
