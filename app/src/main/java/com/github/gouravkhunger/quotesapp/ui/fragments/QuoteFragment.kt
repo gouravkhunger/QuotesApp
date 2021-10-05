@@ -29,6 +29,7 @@ import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.github.gouravkhunger.quotesapp.R
@@ -36,10 +37,13 @@ import com.github.gouravkhunger.quotesapp.models.Quote
 import com.github.gouravkhunger.quotesapp.ui.QuotesActivity
 import com.github.gouravkhunger.quotesapp.util.Constants.Companion.MIN_SWIPE_DISTANCE
 import com.github.gouravkhunger.quotesapp.util.Resource
+import com.github.gouravkhunger.quotesapp.util.ShareUtil
 import com.github.gouravkhunger.quotesapp.viewmodels.QuoteViewModel
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_quotes.*
 import kotlinx.android.synthetic.main.fragment_quote.*
+import kotlinx.android.synthetic.main.fragment_quote.shareQuote
+import kotlinx.android.synthetic.main.quote_item.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -61,6 +65,18 @@ class QuoteFragment : Fragment(R.layout.fragment_quote) {
         // get the viewmodel and set observers on data
         viewModel = (activity as QuotesActivity).viewModel
 
+
+
+        shareQuote.setOnClickListener {
+            ShareUtil.share(
+                quoteCard,
+                requireContext(),
+            )
+        }
+
+
+
+
         viewModel.quote.observe(viewLifecycleOwner, { response ->
 
             // change UI based on what type of resource state the quote is
@@ -74,6 +90,7 @@ class QuoteFragment : Fragment(R.layout.fragment_quote) {
                     fab.visibility = View.GONE
                     quoteShown = false
                     quote = null
+                    shareQuote.isVisible = false
                 }
 
                 is Resource.Success -> {
@@ -88,6 +105,7 @@ class QuoteFragment : Fragment(R.layout.fragment_quote) {
                         showTextViews()
                     }
                     quoteShown = true
+                    shareQuote.isVisible = true
                 }
 
                 is Resource.Error -> {
@@ -247,4 +265,6 @@ class QuoteFragment : Fragment(R.layout.fragment_quote) {
             }
         }
     }
+
+
 }

@@ -27,4 +27,5 @@
 <resources>
     <color name="deep_blue">#FF3700B3</color>
     <color name="light_blue">#2856C8</color>
+    <color name="black">#000000</color>
 </resources>

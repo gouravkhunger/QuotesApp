@@ -81,6 +81,13 @@
                 android:textSize="16sp"
                 android:visibility="gone" />
 
+            <ImageView
+                android:layout_width="wrap_content"
+                android:id="@+id/shareQuote"
+                android:src="@drawable/ic_share"
+                android:layout_gravity="end"
+                android:layout_height="wrap_content"
+                app:tint="@color/black" />
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>

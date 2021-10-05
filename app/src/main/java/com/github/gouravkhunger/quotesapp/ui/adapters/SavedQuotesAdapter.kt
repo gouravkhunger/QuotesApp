@@ -33,10 +33,22 @@ import androidx.recyclerview.widget.RecyclerView
 import com.github.gouravkhunger.quotesapp.R
 import com.github.gouravkhunger.quotesapp.models.Quote
 import kotlinx.android.synthetic.main.quote_item.view.*
+import android.graphics.drawable.Drawable
+
+import android.graphics.Bitmap
+
+import android.content.Intent
+
+import androidx.core.content.FileProvider
+import java.lang.Exception
+
 
 // Adapter of RecyclerView present in Bookmarked Quotes Fragment
-class SavedQuotesAdapter : RecyclerView.Adapter<SavedQuotesAdapter.QuoteViewHolder>() {
+class SavedQuotesAdapter(val clickListener: OnClick) : RecyclerView.Adapter<SavedQuotesAdapter.QuoteViewHolder>() {
 
+    interface OnClick{
+        fun onShareClicked(view:View)
+    }
     inner class QuoteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
     // differ callback that checks if elements are same of not
@@ -82,7 +94,9 @@ class SavedQuotesAdapter : RecyclerView.Adapter<SavedQuotesAdapter.QuoteViewHold
             rvAuthorTv.visibility = View.VISIBLE
 
             rvQuoteLoading.visibility = View.GONE
-
+            shareQuote.setOnClickListener {
+                clickListener.onShareClicked(holder.itemView)
+            }
             // onLongClick Listner definition
             setOnLongClickListener {
                 onItemLongClickListener.let {
@@ -99,4 +113,5 @@ class SavedQuotesAdapter : RecyclerView.Adapter<SavedQuotesAdapter.QuoteViewHold
     fun setOnItemLongClickListener(listener: (Quote) -> Boolean) {
         onItemLongClickListener = listener
     }
+
 }

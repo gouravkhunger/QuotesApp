@@ -37,11 +37,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.github.gouravkhunger.quotesapp.R
 import com.github.gouravkhunger.quotesapp.ui.QuotesActivity
 import com.github.gouravkhunger.quotesapp.ui.adapters.SavedQuotesAdapter
+import com.github.gouravkhunger.quotesapp.util.ShareUtil
 import com.github.gouravkhunger.quotesapp.viewmodels.QuoteViewModel
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_bookmarks.*
 
-class BookmarkFragment : Fragment(R.layout.fragment_bookmarks) {
+class BookmarkFragment : Fragment(R.layout.fragment_bookmarks), SavedQuotesAdapter.OnClick {
 
     // variables
     lateinit var viewModel: QuoteViewModel
@@ -69,6 +70,7 @@ class BookmarkFragment : Fragment(R.layout.fragment_bookmarks) {
             ).show()
             true
         }
+
 
         // callback which defines what should be done when items are swiped
         val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(
@@ -128,11 +130,15 @@ class BookmarkFragment : Fragment(R.layout.fragment_bookmarks) {
 
     // function to set adapter and layout manager on the recycler view
     private fun setupRecyclerView() {
-        savedQuotesAdapter = SavedQuotesAdapter()
+        savedQuotesAdapter = SavedQuotesAdapter(this)
         rvSavedQuotes.apply {
             adapter = savedQuotesAdapter
             layoutManager = LinearLayoutManager(activity)
         }
+    }
+
+    override fun onShareClicked(view: View) {
+        ShareUtil.share(view, requireContext())
     }
 
 }
