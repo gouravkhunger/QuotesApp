@@ -53,6 +53,7 @@ import kotlinx.coroutines.withContext
 import java.lang.Exception
 import kotlin.math.abs
 import kotlin.math.max
+import kotlin.math.min
 
 class QuoteFragment : Fragment(R.layout.fragment_quote) {
 
@@ -146,7 +147,9 @@ class QuoteFragment : Fragment(R.layout.fragment_quote) {
                     // - If the user picked finger up, then check if the swipe distance
                     //   was more than minimum swipe required to load a new quote
                     // - Load a new quote if swiped adequately
-                    if (abs(prevX) > MIN_SWIPE_DISTANCE) viewModel.getRandomQuote()
+
+                    // Log.d("quoteCard.x", quoteCard.x.toString())
+                    if (quoteCard.x < MIN_SWIPE_DISTANCE) viewModel.getRandomQuote()
 
                     // animate the card to its original position after the swipe was
                     // carried out
@@ -166,15 +169,12 @@ class QuoteFragment : Fragment(R.layout.fragment_quote) {
                     if (newX < defaultX + prevWidth) {
                         quoteCard.animate()
                             .x(
-                                max(
-                                    (newX - prevWidth),
-                                    (-MIN_SWIPE_DISTANCE - 150f)
-                                )
+                                min(defaultX, newX - (prevWidth/2)),
                             )
                             .setDuration(0)
                             .start()
                     }
-                    Log.d("currentX:", "${event.x}")
+                    // Log.d("currentX:", "${event.x}")
                 }
             }
 
@@ -232,7 +232,8 @@ class QuoteFragment : Fragment(R.layout.fragment_quote) {
             intent.type = "image/png"
             try {
                 intent.putExtra(Intent.EXTRA_STREAM, uri)
-                intent.putExtra(Intent.EXTRA_TEXT, "Shared from QuotesApp")
+                intent.putExtra(Intent.EXTRA_TEXT, "Shared from QuotesApp. Download the app " +
+                        "from GitHub: " + getString(R.string.repo_url))
 
             }catch (e: Exception){
                 Toast.makeText(context, "failed to share! try again", Toast.LENGTH_SHORT).show()

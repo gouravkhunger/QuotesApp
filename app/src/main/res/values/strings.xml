@@ -26,6 +26,7 @@
 
 <resources>
     <string name="app_name">QuotesApp</string>
+    <string name="repo_url">https://github.com/gouravkhunger/QuotesApp</string>
     <string name="myBookMarks">My Bookmarks</string>
 
     <string name="quote">\"%1$s\"</string>
