@@ -79,23 +79,30 @@
                         android:textSize="26sp"
                         android:visibility="gone" />
 
-                    <TextView
-                        android:id="@+id/authorTv"
-                        style="@style/fontWorkSans"
-                        android:layout_width="wrap_content"
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="30dp"
-                        android:textSize="16sp"
-                        android:visibility="gone" />
+                        android:orientation="horizontal">
+                        <TextView
+                            android:id="@+id/authorTv"
+                            style="@style/fontWorkSans"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="16sp"
+                            android:visibility="gone"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"/>
 
-                    <ImageView
-                        android:id="@+id/quoteShare"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_share"
-                        android:layout_gravity="end"
-                        android:padding="5dp"
-                        android:visibility="gone"/>
+                        <ImageView
+                            android:id="@+id/quoteShare"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="8dp"
+                            android:src="@drawable/ic_share"
+                            android:visibility="gone"
+                            app:layout_constraintEnd_toEndOf="parent"/>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
                 </LinearLayout>
 
