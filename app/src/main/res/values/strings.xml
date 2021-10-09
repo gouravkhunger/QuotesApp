@@ -42,4 +42,5 @@
     <string name="back">Go back to Quotes page.</string>
 
     <string name="toogleBookMark">Bookmark</string>
+    <string name="extraText">Shared from QuotesApp \nMade by Gaurav Khunger</string>
 </resources>

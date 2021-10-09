@@ -24,11 +24,16 @@
 
 package com.github.gouravkhunger.quotesapp.ui.fragments
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
+import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.core.view.drawToBitmap
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.github.gouravkhunger.quotesapp.R
@@ -40,10 +45,12 @@ import com.github.gouravkhunger.quotesapp.viewmodels.QuoteViewModel
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_quotes.*
 import kotlinx.android.synthetic.main.fragment_quote.*
+import kotlinx.android.synthetic.main.fragment_quote.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.lang.Exception
 import kotlin.math.abs
 import kotlin.math.max
 
@@ -72,6 +79,7 @@ class QuoteFragment : Fragment(R.layout.fragment_quote) {
                     showProgressBar()
                     noQuote.visibility = View.GONE
                     fab.visibility = View.GONE
+                    quoteShare.visibility = View.GONE
                     quoteShown = false
                     quote = null
                 }
@@ -81,6 +89,7 @@ class QuoteFragment : Fragment(R.layout.fragment_quote) {
                     hideProgressBar()
                     noQuote.visibility = View.GONE
                     fab.visibility = View.VISIBLE
+                    quoteShare.visibility = View.VISIBLE
                     response.data.let { quoteResponse ->
                         quote = quoteResponse!!
                         quoteTv.text = resources.getString(R.string.quote, quoteResponse.quote)
@@ -96,6 +105,7 @@ class QuoteFragment : Fragment(R.layout.fragment_quote) {
                     hideTextViews()
                     noQuote.visibility = View.VISIBLE
                     fab.visibility = View.GONE
+                    quoteShare.visibility = View.GONE
                     response.message.let {
                         noQuote.text = it
                     }
@@ -207,6 +217,32 @@ class QuoteFragment : Fragment(R.layout.fragment_quote) {
                 viewModel.saveQuote(quote!!)
                 makeSnackBar(view, "Successfully saved Quote!")
             }
+        }
+        quoteShare.setOnClickListener {
+            quoteShare.visibility = View.GONE
+            extraText.setText(R.string.extraText)
+            val aView = view.cardHolder
+            aView.setBackgroundResource(R.drawable.activity_background)
+            val bmp = aView.drawToBitmap()
+            val bmpPath = MediaStore.Images.Media.insertImage(context?.contentResolver, bmp, "quote_bitmap",null)
+            val uri: Uri = Uri.parse(bmpPath)
+
+            // Sharing
+            val intent = Intent(Intent.ACTION_SEND)
+            intent.type = "image/png"
+            try {
+                intent.putExtra(Intent.EXTRA_STREAM, uri)
+                intent.putExtra(Intent.EXTRA_TEXT, "Shared from QuotesApp")
+
+            }catch (e: Exception){
+                Toast.makeText(context, "failed to share! try again", Toast.LENGTH_SHORT).show()
+            }
+            startActivity(Intent.createChooser(intent,"Share via:"))
+
+            ///getting back to normal
+            aView.background = null
+            extraText.setText(R.string.info)
+            view.quoteShare.visibility = View.VISIBLE
         }
     }
 

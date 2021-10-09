@@ -85,11 +85,21 @@
                         android:textSize="16sp"
                         android:visibility="gone" />
 
+                    <ImageView
+                        android:id="@+id/quoteShare"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_share"
+                        android:layout_gravity="end"
+                        android:padding="5dp"
+                        android:visibility="gone"/>
+
                 </LinearLayout>
 
             </androidx.cardview.widget.CardView>
 
         <TextView
+            android:id="@+id/extraText"
             style="@style/fontWorkSans"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
