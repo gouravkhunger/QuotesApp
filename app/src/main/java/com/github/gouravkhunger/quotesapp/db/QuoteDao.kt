@@ -45,5 +45,4 @@ interface QuoteDao {
     // delete the specified quote
     @Delete
     suspend fun deleteSavedQuote(quote: Quote)
-
 }

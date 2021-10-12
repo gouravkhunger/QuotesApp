@@ -24,27 +24,27 @@
  - SOFTWARE.
  -->
 
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rvItemHolder"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:orientation="vertical"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/rvCard"
-        android:layout_width="match_parent"
+        android:id="@+id/rvQuoteCard"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
+        android:layout_gravity="center"
+        android:layout_margin="32dp"
         app:cardCornerRadius="32dp"
-        app:cardElevation="32dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.4"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:cardElevation="32dp">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_margin="32dp"
             android:orientation="vertical">
 
@@ -55,15 +55,6 @@
                 android:layout_gravity="center" />
 
             <TextView
-                android:id="@+id/rvNoQuote"
-                style="@style/fontJosefinSans"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@android:color/black"
-                android:textSize="22sp"
-                android:visibility="gone"/>
-
-            <TextView
                 android:id="@+id/rvQuoteTv"
                 style="@style/fontJosefinSans"
                 android:layout_width="wrap_content"
@@ -72,17 +63,40 @@
                 android:textSize="26sp"
                 android:visibility="gone" />
 
-            <TextView
-                android:id="@+id/rvAuthorTv"
-                style="@style/fontWorkSans"
-                android:layout_width="wrap_content"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:textSize="16sp"
-                android:visibility="gone" />
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/rvAuthorTv"
+                    style="@style/fontWorkSans"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="@string/share_description"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:id="@+id/rvQuoteShare"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_share"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

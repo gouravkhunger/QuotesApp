@@ -123,7 +123,6 @@ class BookmarkFragment : Fragment(R.layout.fragment_bookmarks) {
                 tvNoBookmarks.visibility = View.GONE
             }
         })
-
     }
 
     // function to set adapter and layout manager on the recycler view
@@ -134,5 +133,4 @@ class BookmarkFragment : Fragment(R.layout.fragment_bookmarks) {
             layoutManager = LinearLayoutManager(activity)
         }
     }
-
 }

@@ -32,6 +32,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.github.gouravkhunger.quotesapp.R
 import com.github.gouravkhunger.quotesapp.models.Quote
+import com.github.gouravkhunger.quotesapp.util.ShareUtils
 import kotlinx.android.synthetic.main.quote_item.view.*
 
 // Adapter of RecyclerView present in Bookmarked Quotes Fragment
@@ -82,6 +83,16 @@ class SavedQuotesAdapter : RecyclerView.Adapter<SavedQuotesAdapter.QuoteViewHold
             rvAuthorTv.visibility = View.VISIBLE
 
             rvQuoteLoading.visibility = View.GONE
+
+            rvQuoteShare.setOnClickListener {
+                // Hide share image to not get included in the image
+                rvQuoteShare.visibility = View.GONE
+
+                ShareUtils.share(rvItemHolder, context)
+
+                // Restore the hidden share button back
+                rvQuoteShare.visibility = View.VISIBLE
+            }
 
             // onLongClick Listner definition
             setOnLongClickListener {

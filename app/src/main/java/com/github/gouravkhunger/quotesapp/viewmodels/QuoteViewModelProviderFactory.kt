@@ -38,5 +38,4 @@ class QuoteViewModelProviderFactory(
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         return QuoteViewModel(app, quoteRepository) as T
     }
-
 }

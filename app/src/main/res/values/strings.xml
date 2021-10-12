@@ -36,6 +36,9 @@
         Swipe left on the card to load next Quote.
         Inspirational quotes provided by: ZenQuotes API.
     </string>
+    <string name="release">
+        Release to load the next Quote!
+    </string>
 
     <string name="noBookmarks">No Bookmarked Quotes to show!!</string>
 
@@ -43,5 +46,5 @@
     <string name="back">Go back to Quotes page.</string>
 
     <string name="toogleBookMark">Bookmark</string>
-    <string name="extraText">Shared from QuotesApp \nby Gourav Khunger</string>
+    <string name="share_description">Share Quote as an image</string>
 </resources>

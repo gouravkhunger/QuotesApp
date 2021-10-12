@@ -25,7 +25,6 @@
 package com.github.gouravkhunger.quotesapp.models
 
 import androidx.room.Entity
-import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
 // Quotes table in the database
@@ -39,5 +38,5 @@ data class Quote(
     // other fields
     @SerializedName("q") val quote: String = "",
     @SerializedName("a") val author: String = "",
-    @SerializedName("h") val formatted: String = "",
+    @SerializedName("h") val formatted: String = ""
 )

@@ -24,10 +24,10 @@
 
 package com.github.gouravkhunger.quotesapp.api
 
+import com.github.gouravkhunger.quotesapp.util.Constants.Companion.API_BASE_URL
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import com.github.gouravkhunger.quotesapp.util.Constants.Companion.API_BASE_URL
 import retrofit2.converter.gson.GsonConverterFactory
 
 class RetrofitInstance {
@@ -53,6 +53,5 @@ class RetrofitInstance {
         val api: QuoteAPI by lazy {
             retrofit.create(QuoteAPI::class.java)
         }
-
     }
 }

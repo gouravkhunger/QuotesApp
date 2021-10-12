@@ -131,5 +131,4 @@ class QuoteViewModel(
         }
         return false
     }
-
 }

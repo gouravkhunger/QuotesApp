@@ -24,9 +24,9 @@
 
 package com.github.gouravkhunger.quotesapp.ui
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import com.github.gouravkhunger.quotesapp.R
@@ -36,6 +36,9 @@ import com.github.gouravkhunger.quotesapp.ui.fragments.BookmarkFragmentDirection
 import com.github.gouravkhunger.quotesapp.ui.fragments.QuoteFragmentDirections
 import com.github.gouravkhunger.quotesapp.viewmodels.QuoteViewModel
 import com.github.gouravkhunger.quotesapp.viewmodels.QuoteViewModelProviderFactory
+import com.github.javiersantos.appupdater.AppUpdater
+import com.github.javiersantos.appupdater.enums.Display
+import com.github.javiersantos.appupdater.enums.UpdateFrom
 import kotlinx.android.synthetic.main.activity_quotes.*
 
 class QuotesActivity : AppCompatActivity() {
@@ -82,6 +85,11 @@ class QuotesActivity : AppCompatActivity() {
         // Update theme once everything is set up
         setTheme(R.style.Theme_QuotesApp)
 
+        AppUpdater(this)
+            .setUpdateFrom(UpdateFrom.GITHUB)
+            .setGitHubUserAndRepo("gouravkhunger", "QuotesApp")
+            .setDisplay(Display.SNACKBAR)
+            .start()
     }
 
     // implementation to handle error cases regarding navigation icons
@@ -92,7 +100,7 @@ class QuotesActivity : AppCompatActivity() {
         if (!atHome) {
             backToQuotePage.visibility = View.GONE
             myBookmarksImgBtn.visibility = View.VISIBLE
-	    activity_title.text = resources.getText(R.string.app_name)
+            activity_title.text = resources.getText(R.string.app_name)
             atHome = true
         }
     }

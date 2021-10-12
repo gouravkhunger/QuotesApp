@@ -42,5 +42,4 @@ class QuoteRepository(
         db.getQuoteDao().deleteSavedQuote(quote)
 
     fun getSavedQuotes() = db.getQuoteDao().getSavedQuotes()
-
 }

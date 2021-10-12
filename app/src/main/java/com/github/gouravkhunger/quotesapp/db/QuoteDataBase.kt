@@ -57,7 +57,5 @@ abstract class QuoteDataBase : RoomDatabase() {
                 QuoteDataBase::class.java,
                 "quote_db.db"
             ).build()
-
     }
-
 }

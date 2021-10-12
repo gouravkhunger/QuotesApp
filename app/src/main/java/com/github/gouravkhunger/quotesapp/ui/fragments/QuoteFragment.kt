@@ -24,16 +24,13 @@
 
 package com.github.gouravkhunger.quotesapp.ui.fragments
 
-import android.content.Intent
-import android.net.Uri
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.os.Bundle
-import android.provider.MediaStore
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
-import android.widget.Toast
+import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
-import androidx.core.view.drawToBitmap
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.github.gouravkhunger.quotesapp.R
@@ -41,6 +38,7 @@ import com.github.gouravkhunger.quotesapp.models.Quote
 import com.github.gouravkhunger.quotesapp.ui.QuotesActivity
 import com.github.gouravkhunger.quotesapp.util.Constants.Companion.MIN_SWIPE_DISTANCE
 import com.github.gouravkhunger.quotesapp.util.Resource
+import com.github.gouravkhunger.quotesapp.util.ShareUtils
 import com.github.gouravkhunger.quotesapp.viewmodels.QuoteViewModel
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_quotes.*
@@ -50,9 +48,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.lang.Exception
-import kotlin.math.abs
-import kotlin.math.max
 import kotlin.math.min
 
 class QuoteFragment : Fragment(R.layout.fragment_quote) {
@@ -113,7 +108,6 @@ class QuoteFragment : Fragment(R.layout.fragment_quote) {
                     quoteShown = false
                     quote = null
                 }
-
             }
         })
 
@@ -131,57 +125,59 @@ class QuoteFragment : Fragment(R.layout.fragment_quote) {
         })
 
         // detect left swipe on the "quote card".
-        quoteCard.setOnTouchListener(View.OnTouchListener { v, event ->
+        quoteCard.setOnTouchListener(
+            View.OnTouchListener { v, event ->
 
-            // variables to store current configuration of quote card.
-            val displayMetrics = resources.displayMetrics
-            val prevX = quoteCard.x
-            val prevWidth = quoteCard.width
-            val defaultX = (displayMetrics.widthPixels.toFloat()) / 2 - (prevWidth) / 2
+                // variables to store current configuration of quote card.
+                val displayMetrics = resources.displayMetrics
+                val prevWidth = quoteCard.width
+                val defaultX = (displayMetrics.widthPixels.toFloat()) / 2 - (prevWidth) / 2
 
-            when (event.action) {
-                MotionEvent.ACTION_DOWN -> {
-                }
+                when (event.action) {
+                    MotionEvent.ACTION_UP -> {
+                        var currentX = quoteCard.x
 
-                MotionEvent.ACTION_UP -> {
-                    // - If the user picked finger up, then check if the swipe distance
-                    //   was more than minimum swipe required to load a new quote
-                    // - Load a new quote if swiped adequately
-
-                    // Log.d("quoteCard.x", quoteCard.x.toString())
-                    if (quoteCard.x < MIN_SWIPE_DISTANCE) viewModel.getRandomQuote()
-
-                    // animate the card to its original position after the swipe was
-                    // carried out
-                    quoteCard.animate()
-                        .x(defaultX)
-                        .setDuration(0)
-                        .start()
-                }
-
-                MotionEvent.ACTION_MOVE -> {
-                    // get the new co-ordinate on X-axis to carry out swipe action
-                    val newX = event.rawX
-
-                    // carry out swipe only if newX < defaultX that is,
-                    // the card is swiped to the left side, not to the
-                    // right side
-                    if (newX < defaultX + prevWidth) {
                         quoteCard.animate()
-                            .x(
-                                min(defaultX, newX - (prevWidth/2)),
-                            )
-                            .setDuration(0)
-                            .start()
+                            .x(defaultX)
+                            .setDuration(100)
+                            .setListener(object : AnimatorListenerAdapter() {
+                                override fun onAnimationEnd(animation: Animator) {
+                                    // check if the swipe distance was more than
+                                    // minimum swipe required to load a new quote
+                                    if (currentX < MIN_SWIPE_DISTANCE) {
+                                        // Load a new quote if swiped adequately
+                                        viewModel.getRandomQuote()
+                                        currentX = 0f
+                                    }
+                                }
+                            }).start()
+                        extraText.text = getString(R.string.info)
                     }
-                    // Log.d("currentX:", "${event.x}")
-                }
-            }
 
-            // required to by-pass warning
-            v.performClick()
-            return@OnTouchListener true
-        })
+                    MotionEvent.ACTION_MOVE -> {
+                        // get the new co-ordinate on X-axis to carry out swipe action
+                        val newX = event.rawX
+
+                        // carry out swipe only if newX < defaultX, that is,
+                        // the card is swiped to the left side, not to the right
+                        if (newX < defaultX + prevWidth) {
+                            quoteCard.animate()
+                                .x(
+                                    min(defaultX, newX - (prevWidth / 2))
+                                )
+                                .setDuration(0)
+                                .start()
+                            if(quoteCard.x < MIN_SWIPE_DISTANCE) extraText.text = getString(R.string.release)
+                            else extraText.text = getString(R.string.info)
+                        }
+                    }
+                }
+
+                // required to by-pass warning
+                v.performClick()
+                return@OnTouchListener true
+            }
+        )
 
         // perform save/delete quote action when fab is clicked
         fab.setOnClickListener {
@@ -192,7 +188,8 @@ class QuoteFragment : Fragment(R.layout.fragment_quote) {
                 if ((activity as QuotesActivity).atHome) Snackbar.make(
                     requireActivity().findViewById(
                         R.id.quotesNavHostFragment
-                    ), "Removed Bookmark!", Snackbar.LENGTH_SHORT
+                    ),
+                    "Removed Bookmark!", Snackbar.LENGTH_SHORT
                 )
                     .apply {
                         setAction("Undo") {
@@ -219,31 +216,14 @@ class QuoteFragment : Fragment(R.layout.fragment_quote) {
             }
         }
         quoteShare.setOnClickListener {
+            // Hide share image to not get included in the image
             quoteShare.visibility = View.GONE
-            extraText.setText(R.string.extraText)
-            val aView = view.cardHolder
-            aView.setBackgroundResource(R.drawable.activity_background)
-            val bmp = aView.drawToBitmap()
-            val bmpPath = MediaStore.Images.Media.insertImage(context?.contentResolver, bmp, "quote_bitmap",null)
-            val uri: Uri = Uri.parse(bmpPath)
 
-            // Sharing
-            val intent = Intent(Intent.ACTION_SEND)
-            intent.type = "image/png"
-            try {
-                intent.putExtra(Intent.EXTRA_STREAM, uri)
-                intent.putExtra(Intent.EXTRA_TEXT, "Shared from QuotesApp. Download the app " +
-                        "from GitHub: " + getString(R.string.repo_url))
+            // Actual sharing occurs here
+            ShareUtils.share(view.cardHolder, activity as QuotesActivity)
 
-            }catch (e: Exception){
-                Toast.makeText(context, "failed to share! try again", Toast.LENGTH_SHORT).show()
-            }
-            startActivity(Intent.createChooser(intent,"Share via:"))
-
-            ///getting back to normal
-            aView.background = null
-            extraText.setText(R.string.info)
-            view.quoteShare.visibility = View.VISIBLE
+            // Restore the hidden share button back
+            quoteShare.visibility = View.VISIBLE
         }
     }
 
