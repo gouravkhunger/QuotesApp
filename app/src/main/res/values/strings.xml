@@ -47,4 +47,5 @@
 
     <string name="toogleBookMark">Bookmark</string>
     <string name="share_description">Share Quote as an image</string>
+    <string name="save_quote">Save quote</string>
 </resources>
