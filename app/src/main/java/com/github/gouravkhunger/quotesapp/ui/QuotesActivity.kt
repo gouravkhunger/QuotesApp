@@ -26,37 +26,29 @@ package com.github.gouravkhunger.quotesapp.ui
 
 import android.os.Bundle
 import android.view.View
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import com.github.gouravkhunger.quotesapp.R
-import com.github.gouravkhunger.quotesapp.db.QuoteDataBase
-import com.github.gouravkhunger.quotesapp.repository.QuoteRepository
 import com.github.gouravkhunger.quotesapp.ui.fragments.BookmarkFragmentDirections
 import com.github.gouravkhunger.quotesapp.ui.fragments.QuoteFragmentDirections
 import com.github.gouravkhunger.quotesapp.viewmodels.QuoteViewModel
-import com.github.gouravkhunger.quotesapp.viewmodels.QuoteViewModelProviderFactory
 import com.github.javiersantos.appupdater.AppUpdater
 import com.github.javiersantos.appupdater.enums.Display
 import com.github.javiersantos.appupdater.enums.UpdateFrom
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_quotes.*
 
+@AndroidEntryPoint
 class QuotesActivity : AppCompatActivity() {
 
     // variables
-    lateinit var viewModel: QuoteViewModel
+    private val viewModel by viewModels<QuoteViewModel>()
     var atHome = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_quotes)
-
-        // initialise variables
-        val quoteRepository = QuoteRepository(QuoteDataBase(this))
-        val viewModelProviderFactory = QuoteViewModelProviderFactory(application, quoteRepository)
-
-        viewModel =
-            ViewModelProvider(this, viewModelProviderFactory).get(QuoteViewModel::class.java)
 
         // logic to switch between fragments
         myBookmarksImgBtn.setOnClickListener {

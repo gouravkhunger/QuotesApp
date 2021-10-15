@@ -29,9 +29,9 @@ import android.animation.AnimatorListenerAdapter
 import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View
-import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import com.github.gouravkhunger.quotesapp.R
 import com.github.gouravkhunger.quotesapp.models.Quote
@@ -41,6 +41,7 @@ import com.github.gouravkhunger.quotesapp.util.Resource
 import com.github.gouravkhunger.quotesapp.util.ShareUtils
 import com.github.gouravkhunger.quotesapp.viewmodels.QuoteViewModel
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_quotes.*
 import kotlinx.android.synthetic.main.fragment_quote.*
 import kotlinx.android.synthetic.main.fragment_quote.view.*
@@ -50,19 +51,17 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlin.math.min
 
+@AndroidEntryPoint
 class QuoteFragment : Fragment(R.layout.fragment_quote) {
 
     // variables
-    lateinit var viewModel: QuoteViewModel
+    private val viewModel by activityViewModels<QuoteViewModel>() // getting viewModel linked to activity
     private var quote: Quote? = null
     private var quoteShown = false
     private var isBookMarked = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        // get the viewmodel and set observers on data
-        viewModel = (activity as QuotesActivity).viewModel
 
         viewModel.quote.observe(viewLifecycleOwner, { response ->
 
@@ -167,7 +166,8 @@ class QuoteFragment : Fragment(R.layout.fragment_quote) {
                                 )
                                 .setDuration(0)
                                 .start()
-                            if(quoteCard.x < MIN_SWIPE_DISTANCE) extraText.text = getString(R.string.release)
+                            if (quoteCard.x < MIN_SWIPE_DISTANCE) extraText.text =
+                                getString(R.string.release)
                             else extraText.text = getString(R.string.info)
                         }
                     }
