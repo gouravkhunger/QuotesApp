@@ -24,22 +24,23 @@
 
 package com.github.gouravkhunger.quotesapp.repository
 
-import com.github.gouravkhunger.quotesapp.api.RetrofitInstance
-import com.github.gouravkhunger.quotesapp.db.QuoteDataBase
+import com.github.gouravkhunger.quotesapp.api.QuoteAPI
+import com.github.gouravkhunger.quotesapp.db.QuoteDao
 import com.github.gouravkhunger.quotesapp.models.Quote
+import javax.inject.Inject
 
 // bridge between View Model, API and Database
-class QuoteRepository(
-    private val db: QuoteDataBase
+class QuoteRepository @Inject constructor(
+    private val dao: QuoteDao,
+    private val api: QuoteAPI
 ) {
 
-    suspend fun getRandomQuote() =
-        RetrofitInstance.api.getRandomQuote()
+    suspend fun getRandomQuote() = api.getRandomQuote()
 
-    suspend fun upsert(quote: Quote) = db.getQuoteDao().upsert(quote)
+    suspend fun upsert(quote: Quote) = dao.upsert(quote)
 
     suspend fun deleteQuote(quote: Quote) =
-        db.getQuoteDao().deleteSavedQuote(quote)
+        dao.deleteSavedQuote(quote)
 
-    fun getSavedQuotes() = db.getQuoteDao().getSavedQuotes()
+    fun getSavedQuotes() = dao.getSavedQuotes()
 }

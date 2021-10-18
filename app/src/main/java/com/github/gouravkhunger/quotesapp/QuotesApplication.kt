@@ -25,6 +25,8 @@
 package com.github.gouravkhunger.quotesapp
 
 import android.app.Application
+import dagger.hilt.android.HiltAndroidApp
 
 // Base application class
+@HiltAndroidApp
 class QuotesApplication : Application()

@@ -4,6 +4,7 @@ plugins {
     id("kotlin-kapt")
     id("androidx.navigation.safeargs.kotlin")
     id("kotlin-android-extensions")
+    id("dagger.hilt.android.plugin")
 }
 
 android {
@@ -23,7 +24,10 @@ android {
     buildTypes {
         getByName("release") {
             isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
 
@@ -72,4 +76,7 @@ dependencies {
 
     // App Updater
     implementation("com.github.javiersantos:AppUpdater:2.7")
+
+    implementation("com.google.dagger:hilt-android:${rootProject.extra.get("hiltVersion")}")
+    kapt("com.google.dagger:hilt-compiler:${rootProject.extra.get("hiltVersion")}")
 }

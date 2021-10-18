@@ -31,6 +31,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -39,19 +40,19 @@ import com.github.gouravkhunger.quotesapp.ui.QuotesActivity
 import com.github.gouravkhunger.quotesapp.ui.adapters.SavedQuotesAdapter
 import com.github.gouravkhunger.quotesapp.viewmodels.QuoteViewModel
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_bookmarks.*
 
+@AndroidEntryPoint
 class BookmarkFragment : Fragment(R.layout.fragment_bookmarks) {
 
     // variables
-    lateinit var viewModel: QuoteViewModel
+    private val viewModel by activityViewModels<QuoteViewModel>() // getting viewModel linked to activity
     lateinit var savedQuotesAdapter: SavedQuotesAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // set up viewmodel and recycler view
-        viewModel = (activity as QuotesActivity).viewModel
         setupRecyclerView()
 
         // copy quote when the item is long clicked

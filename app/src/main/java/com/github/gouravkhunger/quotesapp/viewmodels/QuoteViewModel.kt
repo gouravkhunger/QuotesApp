@@ -24,27 +24,24 @@
 
 package com.github.gouravkhunger.quotesapp.viewmodels
 
-import android.app.Application
-import android.content.Context
-import android.net.ConnectivityManager
-import android.net.ConnectivityManager.*
-import android.net.NetworkCapabilities.*
-import android.os.Build
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.github.gouravkhunger.quotesapp.QuotesApplication
 import com.github.gouravkhunger.quotesapp.models.Quote
 import com.github.gouravkhunger.quotesapp.repository.QuoteRepository
+import com.github.gouravkhunger.quotesapp.util.CheckInternet
 import com.github.gouravkhunger.quotesapp.util.Resource
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import okio.IOException
 import retrofit2.Response
+import javax.inject.Inject
 
-class QuoteViewModel(
-    app: Application,
+@HiltViewModel
+class QuoteViewModel @Inject constructor(
+    private val internet: CheckInternet,
     private val quoteRepository: QuoteRepository
-) : AndroidViewModel(app) {
+) : ViewModel() {
 
     // observable variables
     val quote: MutableLiveData<Resource<Quote>> = MutableLiveData()
@@ -65,7 +62,7 @@ class QuoteViewModel(
     // for example: internet connectivity issues
     private suspend fun safeQuotesCall() {
         try {
-            if (hasInternetConnection()) {
+            if (internet.hasInternetConnection()) {
                 quote.postValue(Resource.Loading())
                 val response = quoteRepository.getRandomQuote()
                 quote.postValue(handleQuoteResponse(response))
@@ -101,34 +98,5 @@ class QuoteViewModel(
     fun deleteQuote(quote: Quote) = viewModelScope.launch {
         quoteRepository.deleteQuote(quote)
         bookmarked.postValue(false)
-    }
-
-    // function to check all the possible conditons when the device can have
-    // an active internet connection or not
-    private fun hasInternetConnection(): Boolean {
-        val connectivityManager = getApplication<QuotesApplication>().getSystemService(
-            Context.CONNECTIVITY_SERVICE
-        ) as ConnectivityManager
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            val activeNetwork = connectivityManager.activeNetwork ?: return false
-            val capabilities =
-                connectivityManager.getNetworkCapabilities(activeNetwork) ?: return false
-            return when {
-                capabilities.hasTransport(TRANSPORT_WIFI) -> true
-                capabilities.hasTransport(TRANSPORT_CELLULAR) -> true
-                capabilities.hasTransport(TRANSPORT_ETHERNET) -> true
-                else -> false
-            }
-        } else {
-            connectivityManager.activeNetworkInfo?.run {
-                return when (type) {
-                    TYPE_WIFI -> true
-                    TYPE_MOBILE -> true
-                    TYPE_ETHERNET -> true
-                    else -> false
-                }
-            }
-        }
-        return false
     }
 }
