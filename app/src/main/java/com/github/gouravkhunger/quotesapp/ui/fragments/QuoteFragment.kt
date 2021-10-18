@@ -138,15 +138,18 @@ class QuoteFragment : Fragment(R.layout.fragment_quote) {
 
                         quoteCard.animate()
                             .x(defaultX)
-                            .setDuration(100)
+                            .setDuration(150)
                             .setListener(object : AnimatorListenerAdapter() {
                                 override fun onAnimationEnd(animation: Animator) {
-                                    // check if the swipe distance was more than
-                                    // minimum swipe required to load a new quote
-                                    if (currentX < MIN_SWIPE_DISTANCE) {
-                                        // Load a new quote if swiped adequately
-                                        viewModel.getRandomQuote()
-                                        currentX = 0f
+                                    lifecycleScope.launch(context = Dispatchers.Default) {
+                                        delay(100)
+                                        // check if the swipe distance was more than
+                                        // minimum swipe required to load a new quote
+                                        if (currentX < MIN_SWIPE_DISTANCE) {
+                                            // Load a new quote if swiped adequately
+                                            viewModel.getRandomQuote()
+                                            currentX = 0f
+                                        }
                                     }
                                 }
                             }).start()
@@ -235,12 +238,12 @@ class QuoteFragment : Fragment(R.layout.fragment_quote) {
 
     private fun showTextViews() {
         quoteTv.visibility = View.VISIBLE
-        authorTv.visibility = View.VISIBLE
+        authorTvShareBtnParent.visibility = View.VISIBLE
     }
 
     private fun hideTextViews() {
         quoteTv.visibility = View.GONE
-        authorTv.visibility = View.GONE
+        authorTvShareBtnParent.visibility = View.GONE
     }
 
     private fun hideProgressBar() {
