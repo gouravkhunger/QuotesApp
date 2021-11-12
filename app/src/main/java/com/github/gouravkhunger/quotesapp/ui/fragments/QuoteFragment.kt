@@ -27,6 +27,7 @@ package com.github.gouravkhunger.quotesapp.ui.fragments
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.os.Bundle
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import androidx.core.content.ContextCompat
@@ -129,19 +130,18 @@ class QuoteFragment : Fragment(R.layout.fragment_quote) {
 
                 // variables to store current configuration of quote card.
                 val displayMetrics = resources.displayMetrics
-                val prevWidth = quoteCard.width
-                val defaultX = (displayMetrics.widthPixels.toFloat()) / 2 - (prevWidth) / 2
+                val cardWidth = quoteCard.width
+                val cardStart = (displayMetrics.widthPixels.toFloat() / 2) - (cardWidth / 2)
 
                 when (event.action) {
                     MotionEvent.ACTION_UP -> {
                         var currentX = quoteCard.x
-
                         quoteCard.animate()
-                            .x(defaultX)
+                            .x(cardStart)
                             .setDuration(150)
                             .setListener(object : AnimatorListenerAdapter() {
                                 override fun onAnimationEnd(animation: Animator) {
-                                    lifecycleScope.launch(context = Dispatchers.Default) {
+                                    viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Default) {
                                         delay(100)
                                         // check if the swipe distance was more than
                                         // minimum swipe required to load a new quote
@@ -157,15 +157,18 @@ class QuoteFragment : Fragment(R.layout.fragment_quote) {
                     }
 
                     MotionEvent.ACTION_MOVE -> {
-                        // get the new co-ordinate on X-axis to carry out swipe action
+                        // get the new co-ordinate of X-axis
                         val newX = event.rawX
 
-                        // carry out swipe only if newX < defaultX, that is,
+                        // carry out swipe only if newX < cardStart, that is,
                         // the card is swiped to the left side, not to the right
-                        if (newX < defaultX + prevWidth) {
+                        // Detailed explanation at: https://genicsblog.com/swipe-animation-on-a-cardview-android
+                        if (newX - cardWidth < cardStart) {
+                            Log.d("Values", "$cardStart --- $newX ---- ${displayMetrics.widthPixels.toFloat()}  ---- ${newX - (cardWidth / 2)}")
                             quoteCard.animate()
                                 .x(
-                                    min(defaultX, newX - (prevWidth / 2))
+
+                                    min(cardStart, newX - (cardWidth / 2))
                                 )
                                 .setDuration(0)
                                 .start()
@@ -176,7 +179,7 @@ class QuoteFragment : Fragment(R.layout.fragment_quote) {
                     }
                 }
 
-                // required to by-pass warning
+                // required to by-pass lint warning
                 v.performClick()
                 return@OnTouchListener true
             }
