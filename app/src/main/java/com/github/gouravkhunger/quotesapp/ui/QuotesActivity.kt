@@ -26,13 +26,10 @@ package com.github.gouravkhunger.quotesapp.ui
 
 import android.os.Bundle
 import android.view.View
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.Navigation
 import com.github.gouravkhunger.quotesapp.R
-import com.github.gouravkhunger.quotesapp.ui.fragments.BookmarkFragmentDirections
 import com.github.gouravkhunger.quotesapp.ui.fragments.QuoteFragmentDirections
-import com.github.gouravkhunger.quotesapp.viewmodels.QuoteViewModel
 import com.github.javiersantos.appupdater.AppUpdater
 import com.github.javiersantos.appupdater.enums.Display
 import com.github.javiersantos.appupdater.enums.UpdateFrom
@@ -43,7 +40,6 @@ import kotlinx.android.synthetic.main.activity_quotes.*
 class QuotesActivity : AppCompatActivity() {
 
     // variables
-    private val viewModel by viewModels<QuoteViewModel>()
     var atHome = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,6 +51,7 @@ class QuotesActivity : AppCompatActivity() {
             val action = QuoteFragmentDirections
                 .actionQuoteFragmentToBookmarkFragment()
             val navController = Navigation.findNavController(quotesNavHostFragment)
+
             navController.navigate(action)
             it.visibility = View.GONE
             backToQuotePage.visibility = View.VISIBLE
@@ -63,11 +60,8 @@ class QuotesActivity : AppCompatActivity() {
         }
 
         backToQuotePage.setOnClickListener {
-            val action = BookmarkFragmentDirections
-                .actionBookmarkFragmentToQuoteFragment()
-            val navController = Navigation.findNavController(quotesNavHostFragment)
+            super.onBackPressed()
 
-            navController.navigate(action)
             it.visibility = View.GONE
             myBookmarksImgBtn.visibility = View.VISIBLE
             activity_title.text = resources.getText(R.string.app_name)

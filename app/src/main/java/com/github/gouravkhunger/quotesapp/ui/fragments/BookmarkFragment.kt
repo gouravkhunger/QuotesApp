@@ -112,7 +112,7 @@ class BookmarkFragment : Fragment(R.layout.fragment_bookmarks) {
         }
 
         // observe data changes and apply them to the recycler view
-        viewModel.getSavedQuotes().observe(viewLifecycleOwner, { articles ->
+        viewModel.getSavedQuotes().observe(viewLifecycleOwner) { articles ->
             savedQuotesAdapter.differ.submitList(articles)
 
             // if no quotes present, then show textview and hide recyclerview
@@ -123,7 +123,7 @@ class BookmarkFragment : Fragment(R.layout.fragment_bookmarks) {
                 rvSavedQuotes.visibility = View.VISIBLE
                 tvNoBookmarks.visibility = View.GONE
             }
-        })
+        }
     }
 
     // function to set adapter and layout manager on the recycler view

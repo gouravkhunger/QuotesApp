@@ -29,30 +29,17 @@
     app:startDestination="@id/quoteFragment">
     <fragment
         android:id="@+id/quoteFragment"
-        android:name="com.github.gouravkhunger.quotesapp.ui.fragments.QuoteFragment"
-        android:label="QuoteFragment" >
+        android:name="com.github.gouravkhunger.quotesapp.ui.fragments.QuoteFragment">
         <action
             android:id="@+id/action_quoteFragment_to_bookmarkFragment"
             app:destination="@id/bookmarkFragment"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"/>
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/bookmarkFragment"
-        android:name="com.github.gouravkhunger.quotesapp.ui.fragments.BookmarkFragment"
-        android:label="BookmarkFragment" >
-        <action
-            android:id="@+id/action_bookmarkFragment_to_quoteFragment"
-            app:destination="@id/quoteFragment"
-            app:enterAnim="@anim/slide_in_left"
-            app:exitAnim="@anim/slide_out_right"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"
-            app:popUpTo="@id/quoteFragment"
-            app:popUpToInclusive="true"/>
-        <action
-            android:id="@+id/action_bookmarkFragment_to_quoteFragment2"
-            app:destination="@id/quoteFragment" />
+        android:name="com.github.gouravkhunger.quotesapp.ui.fragments.BookmarkFragment">
     </fragment>
 </navigation>

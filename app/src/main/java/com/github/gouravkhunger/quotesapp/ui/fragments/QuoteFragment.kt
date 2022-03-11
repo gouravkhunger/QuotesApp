@@ -43,7 +43,6 @@ import com.github.gouravkhunger.quotesapp.util.ShareUtils
 import com.github.gouravkhunger.quotesapp.viewmodels.QuoteViewModel
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.activity_quotes.*
 import kotlinx.android.synthetic.main.fragment_quote.*
 import kotlinx.android.synthetic.main.fragment_quote.view.*
 import kotlinx.coroutines.Dispatchers
@@ -64,7 +63,7 @@ class QuoteFragment : Fragment(R.layout.fragment_quote) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.quote.observe(viewLifecycleOwner, { response ->
+        viewModel.quote.observe(viewLifecycleOwner) { response ->
 
             // change UI based on what type of resource state the quote is
             // currently in
@@ -109,11 +108,11 @@ class QuoteFragment : Fragment(R.layout.fragment_quote) {
                     quote = null
                 }
             }
-        })
+        }
 
         // observe bookmarked value from view model
         // and update fab icon based on value
-        viewModel.bookmarked.observe(viewLifecycleOwner, {
+        viewModel.bookmarked.observe(viewLifecycleOwner) {
             isBookMarked = it
             fab.setImageDrawable(
                 ContextCompat.getDrawable(
@@ -122,7 +121,7 @@ class QuoteFragment : Fragment(R.layout.fragment_quote) {
                     else R.drawable.ic_unbookmarked
                 )
             )
-        })
+        }
 
         // detect left swipe on the "quote card".
         quoteCard.setOnTouchListener(
@@ -167,7 +166,6 @@ class QuoteFragment : Fragment(R.layout.fragment_quote) {
                             Log.d("Values", "$cardStart --- $newX ---- ${displayMetrics.widthPixels.toFloat()}  ---- ${newX - (cardWidth / 2)}")
                             quoteCard.animate()
                                 .x(
-
                                     min(cardStart, newX - (cardWidth / 2))
                                 )
                                 .setDuration(0)
