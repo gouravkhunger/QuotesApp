@@ -24,17 +24,23 @@
 
 package com.github.gouravkhunger.quotesapp.ui
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.Navigation
 import com.github.gouravkhunger.quotesapp.R
 import com.github.gouravkhunger.quotesapp.ui.fragments.QuoteFragmentDirections
-import com.github.javiersantos.appupdater.AppUpdater
-import com.github.javiersantos.appupdater.enums.Display
+import com.github.javiersantos.appupdater.AppUpdaterUtils
+import com.github.javiersantos.appupdater.AppUpdaterUtils.UpdateListener
+import com.github.javiersantos.appupdater.enums.AppUpdaterError
 import com.github.javiersantos.appupdater.enums.UpdateFrom
+import com.github.javiersantos.appupdater.objects.Update
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_quotes.*
+
 
 @AndroidEntryPoint
 class QuotesActivity : AppCompatActivity() {
@@ -71,11 +77,30 @@ class QuotesActivity : AppCompatActivity() {
         // Update theme once everything is set up
         setTheme(R.style.Theme_QuotesApp)
 
-        AppUpdater(this)
+        val appUpdaterUtils = AppUpdaterUtils(this)
             .setUpdateFrom(UpdateFrom.GITHUB)
             .setGitHubUserAndRepo("gouravkhunger", "QuotesApp")
-            .setDisplay(Display.SNACKBAR)
-            .start()
+            .withListener(object : UpdateListener {
+                override fun onSuccess(update: Update, isUpdateAvailable: Boolean?) {
+                    Snackbar.make(
+                        findViewById(R.id.flFragment),
+                        getString(R.string.update_text, update.latestVersion),
+                        Snackbar.LENGTH_LONG
+                    ).setAction(R.string.download) {
+                        startActivity(
+                            Intent(
+                                Intent.ACTION_VIEW,
+                                Uri.parse(getString(R.string.download_url))
+                            )
+                        )
+                    }.show()
+                }
+
+                override fun onFailed(error: AppUpdaterError) {
+                    // ignore
+                }
+            })
+        appUpdaterUtils.start()
     }
 
     // implementation to handle error cases regarding navigation icons
