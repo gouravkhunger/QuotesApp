@@ -26,7 +26,6 @@
 
 <resources>
     <string name="app_name">QuotesApp</string>
-    <string name="repo_url">https://github.com/gouravkhunger/QuotesApp</string>
     <string name="myBookMarks">My Bookmarks</string>
 
     <string name="quote">\"%1$s\"</string>
@@ -40,7 +39,7 @@
         Release to load the next Quote!
     </string>
 
-    <string name="noBookmarks">No Bookmarked Quotes to show!!</string>
+    <string name="noBookmarks">No Bookmarked Quote to show!</string>
 
     <string name="bookmarks">Go to your Bookmarked Quotes.</string>
     <string name="back">Go back to Quotes page.</string>
@@ -48,4 +47,8 @@
     <string name="toogleBookMark">Bookmark</string>
     <string name="share_description">Share Quote as an image</string>
     <string name="save_quote">Save quote</string>
+
+    <string name="download">Download</string>
+    <string name="update_text">v%s of QuotesApp is available!</string>
+    <string name="download_url">http://quotes.gouravkhunger.xyz</string>
 </resources>

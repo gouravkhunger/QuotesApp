@@ -31,14 +31,14 @@ object ShareUtils {
             intent.putExtra(Intent.EXTRA_STREAM, uri)
             intent.putExtra(
                 Intent.EXTRA_TEXT,
-                "Shared from QuotesApp built by Gourav Khunger. " +
-                    "Download the latest version of the app from GitHub: " +
-                    context.getString(R.string.repo_url)
+                "Shared from QuotesApp built by Gourav Khunger.\n\n" +
+                    "Download the app now: " +
+                    context.getString(R.string.download_url)
             )
         } catch (e: Exception) {
             Toast.makeText(
                 context,
-                "failed to share! try again",
+                "Failed to share!\nPlease try again.",
                 Toast.LENGTH_SHORT
             ).show()
         }
