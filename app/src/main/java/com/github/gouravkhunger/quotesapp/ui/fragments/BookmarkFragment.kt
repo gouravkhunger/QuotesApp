@@ -73,7 +73,7 @@ class BookmarkFragment : Fragment(R.layout.fragment_bookmarks) {
 
         // callback which defines what should be done when items are swiped
         val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(
-            ItemTouchHelper.UP or ItemTouchHelper.DOWN,
+            ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT,
             ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
         ) {
             override fun onMove(
