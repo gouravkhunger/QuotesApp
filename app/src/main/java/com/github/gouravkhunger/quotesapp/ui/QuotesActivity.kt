@@ -81,7 +81,9 @@ class QuotesActivity : AppCompatActivity() {
             .setUpdateFrom(UpdateFrom.GITHUB)
             .setGitHubUserAndRepo("gouravkhunger", "QuotesApp")
             .withListener(object : UpdateListener {
-                override fun onSuccess(update: Update, isUpdateAvailable: Boolean?) {
+                override fun onSuccess(update: Update, isUpdateAvailable: Boolean) {
+                    if (!isUpdateAvailable) return
+
                     Snackbar.make(
                         findViewById(R.id.flFragment),
                         getString(R.string.update_text, update.latestVersion),
