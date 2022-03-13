@@ -25,9 +25,6 @@ cooler.
 
 Long pressing a quote in your Bookmarks copies that quote to the clipboard... More features along the way 🚀.
 
-# Development Pre-requisites
-Please create a firebase project and add the `google-services.json` file inside the `app/` directory.
-
 # Have awesome ideas?
 Feel free to [Create an issue](https://github.com/gouravkhunger/QuotesApp/issues/new)
 if you think you have a great idea that could be implmented in the app!
