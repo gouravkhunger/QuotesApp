@@ -35,4 +35,7 @@ interface QuoteAPI {
     // full url-> https://zenquotes.io/api/random
     @GET("random")
     suspend fun getRandomQuote(): Response<List<Quote>>
+
+    @GET("today")
+    suspend fun getQuoteOfTheDay(): Response<List<Quote>>
 }

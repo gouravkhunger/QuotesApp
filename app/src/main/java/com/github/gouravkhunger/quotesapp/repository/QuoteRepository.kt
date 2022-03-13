@@ -37,6 +37,8 @@ class QuoteRepository @Inject constructor(
 
     suspend fun getRandomQuote() = api.getRandomQuote()
 
+    suspend fun getQuoteOfTheDay() = api.getQuoteOfTheDay()
+
     suspend fun upsert(quote: Quote) = dao.upsert(quote)
 
     suspend fun deleteQuote(quote: Quote) =
