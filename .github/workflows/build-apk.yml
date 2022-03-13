@@ -9,7 +9,7 @@ jobs:
     steps:
       - name: Decode Keystore
         id: decode_keystore
-        uses: timheuer/base64-to-file@v1
+        uses: timheuer/base64-to-file@v1.1
         with:
           fileName: 'keystore/signing_keystore.jks'
           encodedString: ${{ secrets.KEYSTORE }}
@@ -17,7 +17,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: set up JDK
-        uses: actions/setup-java@v1
+        uses: actions/setup-java@v2
         with:
           distribution: 'temurin'
           java-version: '17'
@@ -26,7 +26,7 @@ jobs:
         run: chmod +x ./gradlew
 
       - name: build prod
-        run: ./gradlew app:bundleRelease
+        run: ./gradlew assembleRelease
         env:
           SIGNING_KEY_ALIAS: ${{ secrets.SIGNING_KEY_ALIAS }}
           SIGNING_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
@@ -36,4 +36,4 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: Build Artifacts
-          path: app/build/outputs/
+          path: app/build/outputs/apk/release/app-release.apk
