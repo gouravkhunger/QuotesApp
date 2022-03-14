@@ -4,10 +4,11 @@
 
 A beautiful Quotes App where you can read and save quotes.
 
-This repository contains source code of a Quotes app, which helps you stay motivated by providing best picked quotes
-stated by famous personalities. This app uses [zen quotes](https://zenquotes.io) api, for retrieving quotes.
+This repository contains source code of a Quotes app, which helps you stay motivated by providing best picked quotes by famous personalities. This app uses [zen quotes](https://zenquotes.io) api, for retrieving quotes.
 
-[Download](https://github.com/gouravkhunger/QuotesApp/releases/latest) the latest `apk` file of this project and do provide feedback 😀
+[Download](https://github.com/gouravkhunger/QuotesApp/releases/latest) the latest `APK` file of this project and do provide feedback 😀
+
+[![Get Quotes App on IzzyOnDroid](https://img.shields.io/endpoint?url=https://apt.izzysoft.de/fdroid/api/v1/shield/com.github.gouravkhunger.quotesapp)](https://apt.izzysoft.de/fdroid/index/apk/com.github.gouravkhunger.quotesapp)
 
 # Screenshots
 Here are some screenshots from the app:
@@ -17,13 +18,20 @@ Here are some screenshots from the app:
 | ![third](https://raw.githubusercontent.com/gouravkhunger/QuotesApp/main/images/three.png) | ![fourth](https://raw.githubusercontent.com/gouravkhunger/QuotesApp/main/images/four.png) |
 
 # Details
-[Watch the demo video on Youtube](https://youtu.be/9Kl6WDmTK8g)
+[Watch the v1 demo video](https://youtu.be/9Kl6WDmTK8g) (<1 min long)
 
-This App has useful features, such as bookmarks, to save the quotes that you find motivating, and keep them in a
-separated section. Moreover, there are a number of cool transition and animation affects, which makes navigation much
-cooler.
+[Watch v2.0.0 insights](https://youtu.be/LSr1D_D1vEA) (<1 min long)
 
-Long pressing a quote in your Bookmarks copies that quote to the clipboard... More features along the way 🚀.
+Some features of the app:
+
+- Read quotes in an elegant swipe user interface. Read more on [how it's built](https://genicsblog.com/swipe-animation-on-a-cardview-android).
+- Long press a quote to copy it to clipboard.
+- Bookmark quotes for later reference. Quotes are stored locally for offline access.
+- Generate a beautiful image from the quotes and share to your social media apps.
+- Sends a daily dose of motivation from the app through notifications.
+- Cool transitions and animation affects, which makes navigation interactive.
+
+More features along the way 🚀.
 
 # Have awesome ideas?
 Feel free to [Create an issue](https://github.com/gouravkhunger/QuotesApp/issues/new)
@@ -45,6 +53,7 @@ Here's a list of tools and frameworks this app uses:
 - Kotlin Extensions and Coroutines
 - Retrofit Library
 - Android Navigation Components
+- WorkManager
 
 # Credits
 I would like to mention these sources that helped directly/indirectly towards
