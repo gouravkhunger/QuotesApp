@@ -82,6 +82,7 @@ class DailyQuoteWorker(
                     .setSound(
                         RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
                     )
+                    .setAutoCancel(true)
 
                 // create notification channels for SDK >= SDK 26
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
