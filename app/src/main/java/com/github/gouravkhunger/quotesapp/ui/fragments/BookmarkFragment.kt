@@ -60,7 +60,11 @@ class BookmarkFragment : Fragment(R.layout.fragment_bookmarks) {
             val clipBoardManager = (activity as QuotesActivity)
                 .getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
 
-            val clipdata = ClipData.newPlainText("quote", it.quote)
+            val clipdata = ClipData.newPlainText(
+                "quote",
+                "\"${it.quote}\"\n\n- ${it.author}"
+            )
+
             clipBoardManager.setPrimaryClip(clipdata)
 
             if (!(activity as QuotesActivity).atHome) Snackbar.make(
