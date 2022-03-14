@@ -73,7 +73,7 @@ class DailyQuoteWorker(
                         NotificationCompat.BigTextStyle()
                             .bigText(
                                 // add author info in the expanded notificaition
-                                result.body()!![0].quote + "\n\n-${result.body()!![0].author}"
+                                result.body()!![0].quote + "\n\n- ${result.body()!![0].author}"
                             )
                     )
                     .setPriority(NotificationCompat.PRIORITY_HIGH)
