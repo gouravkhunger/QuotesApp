@@ -2,16 +2,16 @@
 buildscript {
     val kotlin_version = "1.4.32"
 
-    val hiltVersion by rootProject.extra { "2.38.1" }
+    val hiltVersion by rootProject.extra { "2.43.2" }
 
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
     dependencies {
-        classpath("com.android.tools.build:gradle:7.1.2")
+        classpath("com.android.tools.build:gradle:7.1.3")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version")
-        classpath("androidx.navigation:navigation-safe-args-gradle-plugin:2.4.1")
+        classpath("androidx.navigation:navigation-safe-args-gradle-plugin:2.5.2")
         classpath("com.google.dagger:hilt-android-gradle-plugin:$hiltVersion")
 
         // NOTE: Do not place your application dependencies here; they belong
@@ -22,7 +22,7 @@ buildscript {
 allprojects {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
         maven {
             setUrl("https://jitpack.io")
         }
