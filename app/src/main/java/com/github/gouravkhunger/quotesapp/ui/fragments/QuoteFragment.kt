@@ -26,6 +26,11 @@ package com.github.gouravkhunger.quotesapp.ui.fragments
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
+import android.content.Context
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
 import android.os.Bundle
 import android.util.Log
 import android.view.MotionEvent
@@ -50,25 +55,33 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlin.math.min
+import kotlin.math.sqrt
 
 @AndroidEntryPoint
 class QuoteFragment : Fragment(R.layout.fragment_quote) {
+    private var sensoryManager: SensorManager? = null
 
     // variables
     private val viewModel by activityViewModels<QuoteViewModel>() // getting viewModel linked to activity
     private var quote: Quote? = null
     private var quoteShown = false
     private var isBookMarked = false
+    private var acelVal = 0f
+    private var acelLast = 0f
+    private var shake = 0f
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        sensoryManager = activity?.getSystemService(Context.SENSOR_SERVICE) as SensorManager
+        sensoryManager?.let {
+            it.registerListener(sensorListener, it.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL)
+        }
 
         viewModel.quote.observe(viewLifecycleOwner) { response ->
 
             // change UI based on what type of resource state the quote is
             // currently in
             when (response) {
-
                 is Resource.Loading -> {
                     // quote is loading
                     showProgressBar()
@@ -186,14 +199,14 @@ class QuoteFragment : Fragment(R.layout.fragment_quote) {
         // perform save/delete quote action when fab is clicked
         fab.setOnClickListener {
             if (isBookMarked) {
-
                 // delete quote if it is already bookmarked.
                 viewModel.deleteQuote(quote!!)
                 if ((activity as QuotesActivity).atHome) Snackbar.make(
                     requireActivity().findViewById(
                         R.id.quotesNavHostFragment
                     ),
-                    "Removed Bookmark!", Snackbar.LENGTH_SHORT
+                    "Removed Bookmark!",
+                    Snackbar.LENGTH_SHORT
                 )
                     .apply {
                         setAction("Undo") {
@@ -229,6 +242,25 @@ class QuoteFragment : Fragment(R.layout.fragment_quote) {
             // Restore the hidden share button back
             quoteShare.visibility = View.VISIBLE
         }
+    }
+
+    private val sensorListener: SensorEventListener = object : SensorEventListener {
+        override fun onSensorChanged(event: SensorEvent) {
+            val x = event.values[0]
+            val y = event.values[1]
+            val z = event.values[2]
+            acelLast = acelVal
+            acelVal = sqrt((x * x).toDouble() + y * y + z * z).toFloat()
+            val delta: Float = acelVal - acelLast
+            shake = shake * 0.9f + delta
+
+            if (shake > 10) {
+                // Load a new quote if phone is shaken adequately
+                viewModel.getRandomQuote()
+            }
+        }
+
+        override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {}
     }
 
     // function names say it all
