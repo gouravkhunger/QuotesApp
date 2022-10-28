@@ -26,6 +26,9 @@ package com.github.gouravkhunger.quotesapp.ui.fragments
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.MotionEvent
@@ -228,6 +231,25 @@ class QuoteFragment : Fragment(R.layout.fragment_quote) {
 
             // Restore the hidden share button back
             quoteShare.visibility = View.VISIBLE
+        }
+
+        // copy quote when the clicked on the quote
+        quoteTv.setOnClickListener {
+            val clipBoardManager = (activity as QuotesActivity)
+                .getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+
+            val clipdata = ClipData.newPlainText(
+                "quote",
+                "\"${quote?.quote}\"\n\n- ${quote?.author}"
+            )
+
+            clipBoardManager.setPrimaryClip(clipdata)
+
+            Snackbar.make(
+                view,
+                "Quote Copied!",
+                Snackbar.LENGTH_SHORT
+            ).show()
         }
     }
 
