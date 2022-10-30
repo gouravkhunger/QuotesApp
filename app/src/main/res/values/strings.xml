@@ -32,7 +32,7 @@
     <string name="author">- %1$s</string>
 
     <string name="info">
-        Swipe left on the card to load next Quote.
+        Swipe left on the card or shake the phone to load next Quote.
         Inspirational quotes provided by: ZenQuotes API.
     </string>
     <string name="release">
