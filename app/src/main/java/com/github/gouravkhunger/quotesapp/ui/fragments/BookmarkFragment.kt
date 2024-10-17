@@ -28,7 +28,9 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -36,19 +38,29 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.gouravkhunger.quotesapp.R
+import com.github.gouravkhunger.quotesapp.databinding.FragmentBookmarksBinding
 import com.github.gouravkhunger.quotesapp.ui.QuotesActivity
 import com.github.gouravkhunger.quotesapp.ui.adapters.SavedQuotesAdapter
 import com.github.gouravkhunger.quotesapp.viewmodels.QuoteViewModel
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.fragment_bookmarks.*
 
 @AndroidEntryPoint
-class BookmarkFragment : Fragment(R.layout.fragment_bookmarks) {
+class BookmarkFragment : Fragment() {
 
     // variables
     private val viewModel by activityViewModels<QuoteViewModel>() // getting viewModel linked to activity
     lateinit var savedQuotesAdapter: SavedQuotesAdapter
+    private lateinit var binding: FragmentBookmarksBinding
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = FragmentBookmarksBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -112,7 +124,7 @@ class BookmarkFragment : Fragment(R.layout.fragment_bookmarks) {
 
         // attach the swipe behavior to each recycler view item
         ItemTouchHelper(itemTouchHelperCallback).apply {
-            attachToRecyclerView(rvSavedQuotes)
+            attachToRecyclerView(binding.rvSavedQuotes)
         }
 
         // observe data changes and apply them to the recycler view
@@ -121,11 +133,11 @@ class BookmarkFragment : Fragment(R.layout.fragment_bookmarks) {
 
             // if no quotes present, then show textview and hide recyclerview
             if (articles.isEmpty()) {
-                rvSavedQuotes.visibility = View.GONE
-                tvNoBookmarks.visibility = View.VISIBLE
+                binding.rvSavedQuotes.visibility = View.GONE
+                binding.tvNoBookmarks.visibility = View.VISIBLE
             } else {
-                rvSavedQuotes.visibility = View.VISIBLE
-                tvNoBookmarks.visibility = View.GONE
+                binding.rvSavedQuotes.visibility = View.VISIBLE
+                binding.tvNoBookmarks.visibility = View.GONE
             }
         }
     }
@@ -133,7 +145,7 @@ class BookmarkFragment : Fragment(R.layout.fragment_bookmarks) {
     // function to set adapter and layout manager on the recycler view
     private fun setupRecyclerView() {
         savedQuotesAdapter = SavedQuotesAdapter()
-        rvSavedQuotes.apply {
+        binding.rvSavedQuotes.apply {
             adapter = savedQuotesAdapter
             layoutManager = LinearLayoutManager(activity)
         }

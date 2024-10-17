@@ -26,15 +26,19 @@ package com.github.gouravkhunger.quotesapp.ui.fragments
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
+import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import com.github.gouravkhunger.quotesapp.R
+import com.github.gouravkhunger.quotesapp.databinding.FragmentQuoteBinding
 import com.github.gouravkhunger.quotesapp.models.Quote
 import com.github.gouravkhunger.quotesapp.ui.QuotesActivity
 import com.github.gouravkhunger.quotesapp.util.Constants.Companion.MIN_SWIPE_DISTANCE
@@ -43,8 +47,6 @@ import com.github.gouravkhunger.quotesapp.util.ShareUtils
 import com.github.gouravkhunger.quotesapp.viewmodels.QuoteViewModel
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.fragment_quote.*
-import kotlinx.android.synthetic.main.fragment_quote.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -52,14 +54,25 @@ import kotlinx.coroutines.withContext
 import kotlin.math.min
 
 @AndroidEntryPoint
-class QuoteFragment : Fragment(R.layout.fragment_quote) {
+class QuoteFragment : Fragment() {
 
     // variables
     private val viewModel by activityViewModels<QuoteViewModel>() // getting viewModel linked to activity
     private var quote: Quote? = null
     private var quoteShown = false
     private var isBookMarked = false
+    private lateinit var binding: FragmentQuoteBinding
 
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = FragmentQuoteBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -72,9 +85,11 @@ class QuoteFragment : Fragment(R.layout.fragment_quote) {
                 is Resource.Loading -> {
                     // quote is loading
                     showProgressBar()
-                    noQuote.visibility = View.GONE
-                    fab.visibility = View.GONE
-                    quoteShare.visibility = View.GONE
+                    with(binding) {
+                        noQuote.visibility = View.GONE
+                        fab.visibility = View.GONE
+                        quoteShare.visibility = View.GONE
+                    }
                     quoteShown = false
                     quote = null
                 }
@@ -82,14 +97,17 @@ class QuoteFragment : Fragment(R.layout.fragment_quote) {
                 is Resource.Success -> {
                     // quote loaded successfully
                     hideProgressBar()
-                    noQuote.visibility = View.GONE
-                    fab.visibility = View.VISIBLE
-                    quoteShare.visibility = View.VISIBLE
-                    response.data.let { quoteResponse ->
-                        quote = quoteResponse!!
-                        quoteTv.text = resources.getString(R.string.quote, quoteResponse.quote)
-                        authorTv.text = resources.getString(R.string.author, quoteResponse.author)
-                        showTextViews()
+                    with(binding) {
+                        noQuote.visibility = View.GONE
+                        fab.visibility = View.VISIBLE
+                        quoteShare.visibility = View.VISIBLE
+
+                        response.data.let { quoteResponse ->
+                            quote = quoteResponse!!
+                            quoteTv.text = resources.getString(R.string.quote, quoteResponse.quote)
+                            authorTv.text = resources.getString(R.string.author, quoteResponse.author)
+                            showTextViews()
+                        }
                     }
                     quoteShown = true
                 }
@@ -98,11 +116,14 @@ class QuoteFragment : Fragment(R.layout.fragment_quote) {
                     // there was some error while loading quote
                     hideProgressBar()
                     hideTextViews()
-                    noQuote.visibility = View.VISIBLE
-                    fab.visibility = View.GONE
-                    quoteShare.visibility = View.GONE
-                    response.message.let {
-                        noQuote.text = it
+                    with(binding) {
+                        noQuote.visibility = View.VISIBLE
+                        fab.visibility = View.GONE
+                        quoteShare.visibility = View.GONE
+
+                        response.message.let {
+                            noQuote.text = it
+                        }
                     }
                     quoteShown = false
                     quote = null
@@ -114,7 +135,7 @@ class QuoteFragment : Fragment(R.layout.fragment_quote) {
         // and update fab icon based on value
         viewModel.bookmarked.observe(viewLifecycleOwner) {
             isBookMarked = it
-            fab.setImageDrawable(
+            binding.fab.setImageDrawable(
                 ContextCompat.getDrawable(
                     requireContext(),
                     if (isBookMarked) R.drawable.ic_bookmarked
@@ -124,18 +145,17 @@ class QuoteFragment : Fragment(R.layout.fragment_quote) {
         }
 
         // detect left swipe on the "quote card".
-        quoteCard.setOnTouchListener(
+        binding.quoteCard.setOnTouchListener(
             View.OnTouchListener { v, event ->
-
                 // variables to store current configuration of quote card.
                 val displayMetrics = resources.displayMetrics
-                val cardWidth = quoteCard.width
+                val cardWidth = v.width
                 val cardStart = (displayMetrics.widthPixels.toFloat() / 2) - (cardWidth / 2)
 
                 when (event.action) {
                     MotionEvent.ACTION_UP -> {
-                        var currentX = quoteCard.x
-                        quoteCard.animate()
+                        var currentX = v.x
+                        v.animate()
                             .x(cardStart)
                             .setDuration(150)
                             .setListener(object : AnimatorListenerAdapter() {
@@ -152,7 +172,7 @@ class QuoteFragment : Fragment(R.layout.fragment_quote) {
                                     }
                                 }
                             }).start()
-                        extraText.text = getString(R.string.info)
+                        binding.extraText.text = getString(R.string.info)
                     }
 
                     MotionEvent.ACTION_MOVE -> {
@@ -164,27 +184,25 @@ class QuoteFragment : Fragment(R.layout.fragment_quote) {
                         // Detailed explanation at: https://genicsblog.com/swipe-animation-on-a-cardview-android
                         if (newX - cardWidth < cardStart) {
                             Log.d("Values", "$cardStart --- $newX ---- ${displayMetrics.widthPixels.toFloat()}  ---- ${newX - (cardWidth / 2)}")
-                            quoteCard.animate()
+                            v.animate()
                                 .x(
                                     min(cardStart, newX - (cardWidth / 2))
                                 )
                                 .setDuration(0)
                                 .start()
-                            if (quoteCard.x < MIN_SWIPE_DISTANCE) extraText.text =
+                            if (v.x < MIN_SWIPE_DISTANCE) binding.extraText.text =
                                 getString(R.string.release)
-                            else extraText.text = getString(R.string.info)
+                            else binding.extraText.text = getString(R.string.info)
                         }
                     }
                 }
 
-                // required to by-pass lint warning
-                v.performClick()
                 return@OnTouchListener true
             }
         )
 
         // perform save/delete quote action when fab is clicked
-        fab.setOnClickListener {
+        binding.fab.setOnClickListener {
             if (isBookMarked) {
 
                 // delete quote if it is already bookmarked.
@@ -206,11 +224,11 @@ class QuoteFragment : Fragment(R.layout.fragment_quote) {
                     }
 
                 // work around to hide fab while snackbar is visible
-                if (fab != null) fab.visibility = View.INVISIBLE
+                binding.fab.visibility = View.INVISIBLE
                 this.lifecycleScope.launch(context = Dispatchers.Default) {
                     delay(3000)
                     withContext(Dispatchers.Main) {
-                        if (fab != null) fab.visibility = View.VISIBLE
+                        binding.fab.visibility = View.VISIBLE
                     }
                 }
             } else {
@@ -219,36 +237,40 @@ class QuoteFragment : Fragment(R.layout.fragment_quote) {
                 makeSnackBar(view, "Successfully saved Quote!")
             }
         }
-        quoteShare.setOnClickListener {
+        binding.quoteShare.setOnClickListener {
             // Hide share image to not get included in the image
-            quoteShare.visibility = View.GONE
+            binding.quoteShare.visibility = View.GONE
 
             // Actual sharing occurs here
-            ShareUtils.share(view.cardHolder, activity as QuotesActivity)
+            ShareUtils.share(binding.cardHolder, activity as QuotesActivity)
 
             // Restore the hidden share button back
-            quoteShare.visibility = View.VISIBLE
+            binding.quoteShare.visibility = View.VISIBLE
         }
     }
 
     // function names say it all
     private fun showProgressBar() {
-        quoteLoading.visibility = View.VISIBLE
+        binding.quoteLoading.visibility = View.VISIBLE
         hideTextViews()
     }
 
     private fun showTextViews() {
-        quoteTv.visibility = View.VISIBLE
-        authorTvShareBtnParent.visibility = View.VISIBLE
+        with(binding) {
+            quoteTv.visibility = View.VISIBLE
+            authorTvShareBtnParent.visibility = View.VISIBLE
+        }
     }
 
     private fun hideTextViews() {
-        quoteTv.visibility = View.GONE
-        authorTvShareBtnParent.visibility = View.GONE
+        with(binding) {
+            quoteTv.visibility = View.GONE
+            authorTvShareBtnParent.visibility = View.GONE
+        }
     }
 
     private fun hideProgressBar() {
-        quoteLoading.visibility = View.GONE
+        binding.quoteLoading.visibility = View.GONE
     }
 
     private fun makeSnackBar(view: View, message: String) {
@@ -257,12 +279,12 @@ class QuoteFragment : Fragment(R.layout.fragment_quote) {
 
             // workaround to disable floating action button when a snackbar is made
             // to prevent double clicks while task is executing/snackbar is visible
-            if (fab.visibility == View.VISIBLE) {
-                if (fab != null) fab.visibility = View.INVISIBLE
+            if (binding.fab.visibility == View.VISIBLE) {
+                binding.fab.visibility = View.INVISIBLE
                 lifecycleScope.launch(context = Dispatchers.Default) {
                     delay(3000)
                     withContext(Dispatchers.Main) {
-                        if (fab != null) fab.visibility = View.VISIBLE
+                        binding.fab.visibility = View.VISIBLE
                     }
                 }
             }

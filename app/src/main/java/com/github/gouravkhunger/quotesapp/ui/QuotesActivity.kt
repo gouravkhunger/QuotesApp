@@ -31,6 +31,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.Navigation
 import com.github.gouravkhunger.quotesapp.R
+import com.github.gouravkhunger.quotesapp.databinding.ActivityQuotesBinding
 import com.github.gouravkhunger.quotesapp.ui.fragments.QuoteFragmentDirections
 import com.github.javiersantos.appupdater.AppUpdaterUtils
 import com.github.javiersantos.appupdater.AppUpdaterUtils.UpdateListener
@@ -39,38 +40,38 @@ import com.github.javiersantos.appupdater.enums.UpdateFrom
 import com.github.javiersantos.appupdater.objects.Update
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.activity_quotes.*
-
 
 @AndroidEntryPoint
 class QuotesActivity : AppCompatActivity() {
 
     // variables
     var atHome = true
+    private lateinit var binding: ActivityQuotesBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_quotes)
+        binding = ActivityQuotesBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         // logic to switch between fragments
-        myBookmarksImgBtn.setOnClickListener {
+        binding.myBookmarksImgBtn.setOnClickListener {
             val action = QuoteFragmentDirections
                 .actionQuoteFragmentToBookmarkFragment()
-            val navController = Navigation.findNavController(quotesNavHostFragment)
+            val navController = Navigation.findNavController(binding.quotesNavHostFragment)
 
             navController.navigate(action)
             it.visibility = View.GONE
-            backToQuotePage.visibility = View.VISIBLE
-            activity_title.text = resources.getText(R.string.myBookMarks)
+            binding.backToQuotePage.visibility = View.VISIBLE
+            binding.activityTitle.text = resources.getText(R.string.myBookMarks)
             atHome = false
         }
 
-        backToQuotePage.setOnClickListener {
+        binding.backToQuotePage.setOnClickListener {
             super.onBackPressed()
 
             it.visibility = View.GONE
-            myBookmarksImgBtn.visibility = View.VISIBLE
-            activity_title.text = resources.getText(R.string.app_name)
+            binding.myBookmarksImgBtn.visibility = View.VISIBLE
+            binding.activityTitle.text = resources.getText(R.string.app_name)
             atHome = true
         }
 
@@ -111,9 +112,9 @@ class QuotesActivity : AppCompatActivity() {
     override fun onBackPressed() {
         super.onBackPressed()
         if (!atHome) {
-            backToQuotePage.visibility = View.GONE
-            myBookmarksImgBtn.visibility = View.VISIBLE
-            activity_title.text = resources.getText(R.string.app_name)
+            binding.backToQuotePage.visibility = View.GONE
+            binding.myBookmarksImgBtn.visibility = View.VISIBLE
+            binding.activityTitle.text = resources.getText(R.string.app_name)
             atHome = true
         }
     }

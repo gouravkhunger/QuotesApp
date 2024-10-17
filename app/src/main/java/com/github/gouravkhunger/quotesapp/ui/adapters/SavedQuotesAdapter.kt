@@ -31,9 +31,9 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.github.gouravkhunger.quotesapp.R
+import com.github.gouravkhunger.quotesapp.databinding.QuoteItemBinding
 import com.github.gouravkhunger.quotesapp.models.Quote
 import com.github.gouravkhunger.quotesapp.util.ShareUtils
-import kotlinx.android.synthetic.main.quote_item.view.*
 
 // Adapter of RecyclerView present in Bookmarked Quotes Fragment
 class SavedQuotesAdapter : RecyclerView.Adapter<SavedQuotesAdapter.QuoteViewHolder>() {
@@ -52,16 +52,12 @@ class SavedQuotesAdapter : RecyclerView.Adapter<SavedQuotesAdapter.QuoteViewHold
     }
 
     val differ = AsyncListDiffer(this, differCallback)
+    private lateinit var binding: QuoteItemBinding
 
     // inflate layout
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QuoteViewHolder {
-        return QuoteViewHolder(
-            LayoutInflater.from(parent.context).inflate(
-                R.layout.quote_item,
-                parent,
-                false
-            )
-        )
+        binding = QuoteItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return QuoteViewHolder(binding.root)
     }
 
     override fun getItemCount(): Int {
@@ -73,34 +69,34 @@ class SavedQuotesAdapter : RecyclerView.Adapter<SavedQuotesAdapter.QuoteViewHold
 
     override fun onBindViewHolder(holder: QuoteViewHolder, position: Int) {
         val quote = differ.currentList[position]
-        holder.itemView.apply {
 
-            // set up each item in the recycler view
-            rvQuoteTv.text = resources.getString(R.string.quote, quote.quote)
-            rvAuthorTv.text = resources.getString(R.string.author, quote.author)
+        with(binding) {
+            holder.itemView.apply {
 
-            rvQuoteTv.visibility = View.VISIBLE
-            rvAuthorTv.visibility = View.VISIBLE
+                // set up each item in the recycler view
+                rvQuoteTv.text = resources.getString(R.string.quote, quote.quote)
+                rvAuthorTv.text = resources.getString(R.string.author, quote.author)
 
-            rvQuoteLoading.visibility = View.GONE
+                rvQuoteTv.visibility = View.VISIBLE
+                rvAuthorTv.visibility = View.VISIBLE
 
-            rvQuoteShare.setOnClickListener {
-                // Hide share image to not get included in the image
-                rvQuoteShare.visibility = View.GONE
+                rvQuoteLoading.visibility = View.GONE
 
-                ShareUtils.share(rvItemHolder, context)
+                rvQuoteShare.setOnClickListener {
+                    // Hide share image to not get included in the image
+                    rvQuoteShare.visibility = View.GONE
 
-                // Restore the hidden share button back
-                rvQuoteShare.visibility = View.VISIBLE
-            }
+                    ShareUtils.share(rvItemHolder, context)
 
-            // onLongClick Listner definition
-            setOnLongClickListener {
-                onItemLongClickListener.let {
-                    if (it != null) {
+                    // Restore the hidden share button back
+                    rvQuoteShare.visibility = View.VISIBLE
+                }
+
+                // onLongClick Listner definition
+                onItemLongClickListener?.let {
+                    setOnLongClickListener {
                         it(quote)
                     }
-                    true
                 }
             }
         }
