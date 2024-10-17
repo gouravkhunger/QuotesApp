@@ -33,6 +33,7 @@ import androidx.navigation.Navigation
 import com.github.gouravkhunger.quotesapp.R
 import com.github.gouravkhunger.quotesapp.databinding.ActivityQuotesBinding
 import com.github.gouravkhunger.quotesapp.ui.fragments.QuoteFragmentDirections
+import com.github.gouravkhunger.quotesapp.ui.fragments.SettingsFragment
 import com.github.javiersantos.appupdater.AppUpdaterUtils
 import com.github.javiersantos.appupdater.AppUpdaterUtils.UpdateListener
 import com.github.javiersantos.appupdater.enums.AppUpdaterError
@@ -82,6 +83,10 @@ class QuotesActivity : AppCompatActivity() {
             }
 
             atHome = true
+        }
+
+        binding.settingsBtn.setOnClickListener {
+            SettingsFragment().show(supportFragmentManager, SettingsFragment.TAG)
         }
 
         // Update theme once everything is set up

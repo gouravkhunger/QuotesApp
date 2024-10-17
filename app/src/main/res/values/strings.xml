@@ -54,4 +54,11 @@
 
     <string name="daily_notif_tag">daily_motivation</string>
     <string name="notif_title">Your daily dose of wisdom is here!</string>
+
+    <string name="settings">Settings</string>
+    <string name="check_updates">Check for updates</string>
+    <string name="check_updates_desc">
+        Auto-check &amp; for new version of the app on every launch.
+        Checks GitHub releases for updates. Your installation source might differ.
+    </string>
 </resources>
