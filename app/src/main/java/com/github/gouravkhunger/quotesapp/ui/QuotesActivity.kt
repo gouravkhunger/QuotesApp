@@ -61,17 +61,26 @@ class QuotesActivity : AppCompatActivity() {
 
             navController.navigate(action)
             it.visibility = View.GONE
-            binding.backToQuotePage.visibility = View.VISIBLE
-            binding.activityTitle.text = resources.getText(R.string.myBookMarks)
+
+            with(binding) {
+                settingsBtn.visibility = View.GONE
+                backToQuotePage.visibility = View.VISIBLE
+                activityTitle.text = resources.getText(R.string.myBookMarks)
+            }
+
             atHome = false
         }
 
         binding.backToQuotePage.setOnClickListener {
             super.onBackPressed()
-
             it.visibility = View.GONE
-            binding.myBookmarksImgBtn.visibility = View.VISIBLE
-            binding.activityTitle.text = resources.getText(R.string.app_name)
+
+            with(binding) {
+                settingsBtn.visibility = View.VISIBLE
+                myBookmarksImgBtn.visibility = View.VISIBLE
+                activityTitle.text = resources.getText(R.string.app_name)
+            }
+
             atHome = true
         }
 
@@ -112,9 +121,13 @@ class QuotesActivity : AppCompatActivity() {
     override fun onBackPressed() {
         super.onBackPressed()
         if (!atHome) {
-            binding.backToQuotePage.visibility = View.GONE
-            binding.myBookmarksImgBtn.visibility = View.VISIBLE
-            binding.activityTitle.text = resources.getText(R.string.app_name)
+            with(binding) {
+                settingsBtn.visibility = View.VISIBLE
+                backToQuotePage.visibility = View.GONE
+                myBookmarksImgBtn.visibility = View.VISIBLE
+                activityTitle.text = resources.getText(R.string.app_name)
+            }
+
             atHome = true
         }
     }
