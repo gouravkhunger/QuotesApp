@@ -52,10 +52,21 @@
     <string name="update_text">v%s of QuotesApp is available!</string>
     <string name="download_url">https://l.gourav.sh/quotesapp</string>
 
-    <string name="daily_notif_tag">daily_motivation</string>
+    <string name="daily_notif_id">daily_wisdom</string>
+    <string name="daily_notif_name">Daily wisdom</string>
+    <string name="daily_notif_desc">
+        Get your daily dose of wisdom through quote of the day notifications!
+    </string>
+
     <string name="notif_title">Your daily dose of wisdom is here!</string>
 
+    <string name="manage">Manage</string>
     <string name="settings">Settings</string>
+    <string name="notifications">Notifications</string>
+    <string name="notif_desc">
+        Notification permissions are required to send quote of the day.
+    </string>
+
     <string name="check_updates">Check for updates</string>
     <string name="check_updates_desc">
         Auto-check for updates from GitHub releases.

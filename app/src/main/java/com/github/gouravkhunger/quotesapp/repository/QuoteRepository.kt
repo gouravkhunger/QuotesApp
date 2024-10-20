@@ -49,8 +49,8 @@ class QuoteRepository @Inject constructor(
 
     fun getSavedQuotes() = dao.getSavedQuotes()
 
-    suspend fun getSetting(preference: Preference) = preferenceStore.getBoolean(preference)
+    suspend fun <T> getSetting(preference: Preference<T>) = preferenceStore.getPreference(preference)
 
-    suspend fun saveSetting(preference: Preference, value: Boolean) =
-        preferenceStore.putBoolean(preference, value)
+    suspend fun <T> saveSetting(preference: Preference<T>, value: T) =
+        preferenceStore.putPreference(preference, value)
 }

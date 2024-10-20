@@ -102,11 +102,11 @@ class QuoteViewModel @Inject constructor(
         bookmarked.postValue(false)
     }
 
-    fun saveSetting(pref: Preference, value: Boolean) = viewModelScope.launch {
+    fun <T> saveSetting(pref: Preference<T>, value: T) = viewModelScope.launch {
         quoteRepository.saveSetting(pref, value)
     }
 
-    fun getSetting(pref: Preference): Boolean = runBlocking {
+    fun <T> getSetting(pref: Preference<T>): T = runBlocking {
         return@runBlocking quoteRepository.getSetting(pref)
     }
 }

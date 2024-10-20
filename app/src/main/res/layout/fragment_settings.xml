@@ -36,6 +36,28 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@android:color/black" />
+    <TextView
+        android:textSize="16sp"
+        android:layout_marginTop="8dp"
+        android:text="@string/notifications"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/black" />
+    <TextView
+        android:textSize="12sp"
+        android:text="@string/notif_desc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <Button
+        android:padding="8dp"
+        android:text="@string/manage"
+        android:layout_marginTop="8dp"
+        android:id="@+id/manageNotification"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/black"
+        android:drawableEnd="@drawable/ic_open_in_new"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
     <CheckBox
         android:minWidth="0dp"
         android:minHeight="0dp"
