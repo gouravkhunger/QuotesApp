@@ -36,30 +36,32 @@ import javax.inject.Inject
 private const val PREFERENCES_NAME = "settings"
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = PREFERENCES_NAME)
 
-enum class Preference(val key: String, val default: Any) {
-    CHECK_FOR_UPDATES("check_for_updates", false),
+data class Preference<T>(
+    val key: Preferences.Key<T>,
+    val default: T
+) {
+    companion object {
+        val ASK_NOTIF_PERM = Preference(booleanPreferencesKey("ask_notif_perm"), true)
+        val CHECK_FOR_UPDATES = Preference(booleanPreferencesKey("check_for_updates"), false)
+    }
 }
 
 interface IPreferenceStore {
-    suspend fun putBoolean(preference: Preference, value: Boolean)
-    suspend fun getBoolean(preference: Preference): Boolean
+    suspend fun <T> putPreference(preference: Preference<T>, value: T)
+    suspend fun <T> getPreference(preference: Preference<T>): T
 }
 
 class PreferenceStore @Inject constructor(
     private val context: Context
 ): IPreferenceStore {
-    override suspend fun putBoolean(preference: Preference, value: Boolean) {
-        val prefKey = booleanPreferencesKey(preference.key)
-
+    override suspend fun <T> putPreference(preference: Preference<T>, value: T) {
         context.dataStore.edit { prefs ->
-            prefs[prefKey] = value
+            prefs[preference.key] = value
         }
     }
 
-    override suspend fun getBoolean(preference: Preference): Boolean {
-        val prefKey = booleanPreferencesKey(preference.key)
+    override suspend fun <T> getPreference(preference: Preference<T>): T {
         val prefs = context.dataStore.data.first()
-
-        return prefs[prefKey] ?: preference.default as Boolean
+        return (prefs[preference.key] ?: preference.default)
     }
 }
