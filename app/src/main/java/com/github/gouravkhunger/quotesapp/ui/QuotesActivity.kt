@@ -28,12 +28,15 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.Navigation
 import com.github.gouravkhunger.quotesapp.R
 import com.github.gouravkhunger.quotesapp.databinding.ActivityQuotesBinding
+import com.github.gouravkhunger.quotesapp.store.Preference
 import com.github.gouravkhunger.quotesapp.ui.fragments.QuoteFragmentDirections
 import com.github.gouravkhunger.quotesapp.ui.fragments.SettingsFragment
+import com.github.gouravkhunger.quotesapp.viewmodels.QuoteViewModel
 import com.github.javiersantos.appupdater.AppUpdaterUtils
 import com.github.javiersantos.appupdater.AppUpdaterUtils.UpdateListener
 import com.github.javiersantos.appupdater.enums.AppUpdaterError
@@ -48,6 +51,7 @@ class QuotesActivity : AppCompatActivity() {
     // variables
     var atHome = true
     private lateinit var binding: ActivityQuotesBinding
+    private val viewModel by viewModels<QuoteViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -91,6 +95,8 @@ class QuotesActivity : AppCompatActivity() {
 
         // Update theme once everything is set up
         setTheme(R.style.Theme_QuotesApp)
+
+        if (!viewModel.getSetting(Preference.CHECK_FOR_UPDATES)) return
 
         val appUpdaterUtils = AppUpdaterUtils(this)
             .setUpdateFrom(UpdateFrom.GITHUB)

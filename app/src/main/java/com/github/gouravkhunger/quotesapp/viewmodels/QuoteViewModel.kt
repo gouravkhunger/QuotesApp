@@ -29,10 +29,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.github.gouravkhunger.quotesapp.models.Quote
 import com.github.gouravkhunger.quotesapp.repository.QuoteRepository
+import com.github.gouravkhunger.quotesapp.store.Preference
 import com.github.gouravkhunger.quotesapp.util.CheckInternet
 import com.github.gouravkhunger.quotesapp.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import okio.IOException
 import retrofit2.Response
 import javax.inject.Inject
@@ -98,5 +100,13 @@ class QuoteViewModel @Inject constructor(
     fun deleteQuote(quote: Quote) = viewModelScope.launch {
         quoteRepository.deleteQuote(quote)
         bookmarked.postValue(false)
+    }
+
+    fun saveSetting(pref: Preference, value: Boolean) = viewModelScope.launch {
+        quoteRepository.saveSetting(pref, value)
+    }
+
+    fun getSetting(pref: Preference): Boolean = runBlocking {
+        return@runBlocking quoteRepository.getSetting(pref)
     }
 }

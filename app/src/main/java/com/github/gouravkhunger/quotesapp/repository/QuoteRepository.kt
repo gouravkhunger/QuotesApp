@@ -27,12 +27,15 @@ package com.github.gouravkhunger.quotesapp.repository
 import com.github.gouravkhunger.quotesapp.api.QuoteAPI
 import com.github.gouravkhunger.quotesapp.db.QuoteDao
 import com.github.gouravkhunger.quotesapp.models.Quote
+import com.github.gouravkhunger.quotesapp.store.Preference
+import com.github.gouravkhunger.quotesapp.store.PreferenceStore
 import javax.inject.Inject
 
 // bridge between View Model, API and Database
 class QuoteRepository @Inject constructor(
     private val dao: QuoteDao,
-    private val api: QuoteAPI
+    private val api: QuoteAPI,
+    private val preferenceStore: PreferenceStore
 ) {
 
     suspend fun getRandomQuote() = api.getRandomQuote()
@@ -45,4 +48,9 @@ class QuoteRepository @Inject constructor(
         dao.deleteSavedQuote(quote)
 
     fun getSavedQuotes() = dao.getSavedQuotes()
+
+    suspend fun getSetting(preference: Preference) = preferenceStore.getBoolean(preference)
+
+    suspend fun saveSetting(preference: Preference, value: Boolean) =
+        preferenceStore.putBoolean(preference, value)
 }

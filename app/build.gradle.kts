@@ -73,6 +73,9 @@ dependencies {
     // WorkManager
     implementation("androidx.work:work-runtime-ktx:2.9.1")
 
+    // DataStore
+    implementation("androidx.datastore:datastore-preferences:1.1.1")
+
     // Room
     implementation("androidx.room:room-runtime:2.6.1")
     kapt("androidx.room:room-compiler:2.6.1")

@@ -5,6 +5,7 @@ import androidx.room.Room
 import com.github.gouravkhunger.quotesapp.api.QuoteAPI
 import com.github.gouravkhunger.quotesapp.db.QuoteDao
 import com.github.gouravkhunger.quotesapp.db.QuoteDataBase
+import com.github.gouravkhunger.quotesapp.store.PreferenceStore
 import com.github.gouravkhunger.quotesapp.util.Constants
 import dagger.Module
 import dagger.Provides
@@ -54,4 +55,10 @@ object AppModule {
 
     @Provides
     fun providesQuoteDao(quoteDataBase: QuoteDataBase): QuoteDao = quoteDataBase.getQuoteDao()
+
+    @Singleton
+    @Provides
+    fun providePreferenceStore(
+        @ApplicationContext app: Context
+    ): PreferenceStore = PreferenceStore(app)
 }
