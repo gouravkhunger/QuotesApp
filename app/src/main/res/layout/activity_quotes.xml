@@ -43,6 +43,17 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageButton
+            android:id="@+id/settingsBtn"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerInParent="true"
+            android:layout_marginStart="10dp"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/back"
+            android:src="@drawable/ic_settings" />
+
+        <ImageButton
             android:id="@+id/backToQuotePage"
             android:layout_width="60dp"
             android:layout_height="60dp"

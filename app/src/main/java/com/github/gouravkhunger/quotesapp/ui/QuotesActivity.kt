@@ -28,11 +28,15 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.Navigation
 import com.github.gouravkhunger.quotesapp.R
 import com.github.gouravkhunger.quotesapp.databinding.ActivityQuotesBinding
+import com.github.gouravkhunger.quotesapp.store.Preference
 import com.github.gouravkhunger.quotesapp.ui.fragments.QuoteFragmentDirections
+import com.github.gouravkhunger.quotesapp.ui.fragments.SettingsFragment
+import com.github.gouravkhunger.quotesapp.viewmodels.QuoteViewModel
 import com.github.javiersantos.appupdater.AppUpdaterUtils
 import com.github.javiersantos.appupdater.AppUpdaterUtils.UpdateListener
 import com.github.javiersantos.appupdater.enums.AppUpdaterError
@@ -47,6 +51,7 @@ class QuotesActivity : AppCompatActivity() {
     // variables
     var atHome = true
     private lateinit var binding: ActivityQuotesBinding
+    private val viewModel by viewModels<QuoteViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,22 +66,37 @@ class QuotesActivity : AppCompatActivity() {
 
             navController.navigate(action)
             it.visibility = View.GONE
-            binding.backToQuotePage.visibility = View.VISIBLE
-            binding.activityTitle.text = resources.getText(R.string.myBookMarks)
+
+            with(binding) {
+                settingsBtn.visibility = View.GONE
+                backToQuotePage.visibility = View.VISIBLE
+                activityTitle.text = resources.getText(R.string.myBookMarks)
+            }
+
             atHome = false
         }
 
         binding.backToQuotePage.setOnClickListener {
             super.onBackPressed()
-
             it.visibility = View.GONE
-            binding.myBookmarksImgBtn.visibility = View.VISIBLE
-            binding.activityTitle.text = resources.getText(R.string.app_name)
+
+            with(binding) {
+                settingsBtn.visibility = View.VISIBLE
+                myBookmarksImgBtn.visibility = View.VISIBLE
+                activityTitle.text = resources.getText(R.string.app_name)
+            }
+
             atHome = true
+        }
+
+        binding.settingsBtn.setOnClickListener {
+            SettingsFragment().show(supportFragmentManager, SettingsFragment.TAG)
         }
 
         // Update theme once everything is set up
         setTheme(R.style.Theme_QuotesApp)
+
+        if (!viewModel.getSetting(Preference.CHECK_FOR_UPDATES)) return
 
         val appUpdaterUtils = AppUpdaterUtils(this)
             .setUpdateFrom(UpdateFrom.GITHUB)
@@ -112,9 +132,13 @@ class QuotesActivity : AppCompatActivity() {
     override fun onBackPressed() {
         super.onBackPressed()
         if (!atHome) {
-            binding.backToQuotePage.visibility = View.GONE
-            binding.myBookmarksImgBtn.visibility = View.VISIBLE
-            binding.activityTitle.text = resources.getText(R.string.app_name)
+            with(binding) {
+                settingsBtn.visibility = View.VISIBLE
+                backToQuotePage.visibility = View.GONE
+                myBookmarksImgBtn.visibility = View.VISIBLE
+                activityTitle.text = resources.getText(R.string.app_name)
+            }
+
             atHome = true
         }
     }
