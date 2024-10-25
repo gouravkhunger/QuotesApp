@@ -6,9 +6,13 @@ A beautiful Quotes App where you can read and save quotes.
 
 This repository contains source code of a Quotes app, which helps you stay motivated by providing best picked quotes by famous personalities. This app uses [zen quotes](https://zenquotes.io) api, for retrieving quotes.
 
-[Download](https://github.com/gouravkhunger/QuotesApp/releases/latest) the latest `APK` file of this project and do provide feedback 😀
+[Download][github] the latest `APK` file of this project and do provide feedback 😀
 
-[![Get Quotes App on IzzyOnDroid](https://img.shields.io/endpoint?url=https://apt.izzysoft.de/fdroid/api/v1/shield/com.github.gouravkhunger.quotesapp)](https://apt.izzysoft.de/fdroid/index/apk/com.github.gouravkhunger.quotesapp)
+[![Get Quotes App on IzzyOnDroid](https://img.shields.io/endpoint?url=https://apt.izzysoft.de/fdroid/api/v1/shield/com.github.gouravkhunger.quotesapp)][izzysoft]
+[![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/gouravkhunger/quotesapp/total)][github]
+
+[izzysoft]: https://apt.izzysoft.de/fdroid/index/apk/com.github.gouravkhunger.quotesapp
+[github]: https://github.com/gouravkhunger/QuotesApp/releases/latest
 
 # Screenshots
 Here are some screenshots from the app:
