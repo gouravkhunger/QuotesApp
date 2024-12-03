@@ -55,6 +55,13 @@ android {
     buildFeatures {
         viewBinding = true
     }
+
+    // Disable dependency metadata
+    // https://github.com/gouravkhunger/QuotesApp/issues/22#issuecomment-2435024844
+    dependenciesInfo {
+        includeInApk = false
+        includeInBundle = false
+    }
 }
 
 dependencies {
