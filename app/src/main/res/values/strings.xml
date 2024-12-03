@@ -70,7 +70,8 @@
     <string name="check_updates">Check for updates</string>
     <string name="check_updates_desc">
         Auto-check for updates from GitHub releases.
-        You will be presented the link to download the latest APK if available.
-        Note: If your installation source is different, please update from there.
+        If available, you will be presented a link to download the latest APK directly.
+        Note: If your installation source is different, please update from there,
+        as e.g. additional security measures implemented there would be bypassed.
     </string>
 </resources>
