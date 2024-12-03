@@ -23,8 +23,8 @@ android {
     defaultConfig {
         minSdk = 23
         targetSdk = 34
-        versionCode = 5
-        versionName = "2.1.2"
+        versionCode = 6
+        versionName = "2.1.3"
 
         applicationId = "com.github.gouravkhunger.quotesapp"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
