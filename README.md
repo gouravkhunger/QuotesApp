@@ -8,9 +8,9 @@ This repository contains source code of a Quotes app, which helps you stay motiv
 
 [Download][github] the latest `APK` file of this project and do provide feedback 😀
 
+[![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/gouravkhunger/quotesapp/total)][github]
 [![Get Quotes App on IzzyOnDroid](https://img.shields.io/endpoint?url=https://apt.izzysoft.de/fdroid/api/v1/shield/com.github.gouravkhunger.quotesapp)][izzysoft]
 [![RB shield](https://shields.rbtlog.dev/simple/com.github.gouravkhunger.quotesapp)][rbshield]
-[![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/gouravkhunger/quotesapp/total)][github]
 
 [izzysoft]: https://apt.izzysoft.de/fdroid/index/apk/com.github.gouravkhunger.quotesapp
 [github]: https://github.com/gouravkhunger/QuotesApp/releases/latest
