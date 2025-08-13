@@ -1,6 +1,6 @@
 # QuotesApp
 
-<img alt = "QuotesApp Logo" src="https://raw.githubusercontent.com/gouravkhunger/QuotesApp/main/images/logo.png" height="150px" width="150px" align="right"/>
+<img alt = "QuotesApp Logo" src="https://raw.githubusercontent.com/gouravkhunger/QuotesApp/main/metadata/en-US/images/phoneScreenshots/logo.png" height="150px" width="150px" align="right"/>
 
 A beautiful Quotes App where you can read and save quotes.
 
@@ -8,18 +8,20 @@ This repository contains source code of a Quotes app, which helps you stay motiv
 
 [Download][github] the latest `APK` file of this project and do provide feedback 😀
 
-[![Get Quotes App on IzzyOnDroid](https://img.shields.io/endpoint?url=https://apt.izzysoft.de/fdroid/api/v1/shield/com.github.gouravkhunger.quotesapp)][izzysoft]
 [![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/gouravkhunger/quotesapp/total)][github]
+[![Get Quotes App on IzzyOnDroid](https://img.shields.io/endpoint?url=https://apt.izzysoft.de/fdroid/api/v1/shield/com.github.gouravkhunger.quotesapp)][izzysoft]
+[![RB shield](https://shields.rbtlog.dev/simple/com.github.gouravkhunger.quotesapp)][rbshield]
 
 [izzysoft]: https://apt.izzysoft.de/fdroid/index/apk/com.github.gouravkhunger.quotesapp
 [github]: https://github.com/gouravkhunger/QuotesApp/releases/latest
+[rbshield]: https://shields.rbtlog.dev/com.github.gouravkhunger.quotesapp
 
 # Screenshots
 Here are some screenshots from the app:
 
-| ![first](https://raw.githubusercontent.com/gouravkhunger/QuotesApp/main/images/one.png)   | ![second](https://raw.githubusercontent.com/gouravkhunger/QuotesApp/main/images/two.png)  |
+| ![first](https://raw.githubusercontent.com/gouravkhunger/QuotesApp/main/metadata/en-US/images/phoneScreenshots/01.png)   | ![second](https://raw.githubusercontent.com/gouravkhunger/QuotesApp/main/metadata/en-US/images/phoneScreenshots/02.png)  |
 |---------------------------------|---------------------------------|
-| ![third](https://raw.githubusercontent.com/gouravkhunger/QuotesApp/main/images/three.png) | ![fourth](https://raw.githubusercontent.com/gouravkhunger/QuotesApp/main/images/four.png) |
+| ![third](https://raw.githubusercontent.com/gouravkhunger/QuotesApp/main/metadata/en-US/images/phoneScreenshots/03.png) | ![fourth](https://raw.githubusercontent.com/gouravkhunger/QuotesApp/main/metadata/en-US/images/phoneScreenshots/04.png) |
 
 # Details
 [Watch the v1 demo video](https://youtu.be/9Kl6WDmTK8g) (<1 min long)
