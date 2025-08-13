@@ -1,1 +1,1 @@
-read and save quotes
+Read, save and share quotes
