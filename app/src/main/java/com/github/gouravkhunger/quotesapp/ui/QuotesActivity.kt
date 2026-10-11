@@ -42,7 +42,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
-import androidx.navigation.Navigation
+import androidx.navigation.fragment.NavHostFragment
 import com.github.gouravkhunger.quotesapp.R
 import com.github.gouravkhunger.quotesapp.databinding.ActivityQuotesBinding
 import com.github.gouravkhunger.quotesapp.store.Preference
@@ -80,7 +80,9 @@ class QuotesActivity : AppCompatActivity() {
             windowInsets
         }
 
-        val navController = Navigation.findNavController(binding.quotesNavHostFragment)
+        val navController = (
+            supportFragmentManager.findFragmentById(R.id.quotesNavHostFragment) as NavHostFragment
+        ).navController
         navController.addOnDestinationChangedListener { _, destination, _ ->
             atHome = destination.id == R.id.quoteFragment
             binding.settingsBtn.visibility = if (atHome) View.VISIBLE else View.GONE
