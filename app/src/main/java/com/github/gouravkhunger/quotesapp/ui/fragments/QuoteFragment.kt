@@ -27,11 +27,16 @@ package com.github.gouravkhunger.quotesapp.ui.fragments
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.annotation.SuppressLint
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
+import android.view.HapticFeedbackConstants
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
+import android.view.ViewConfiguration
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -51,6 +56,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlin.math.abs
 import kotlin.math.min
 
 @AndroidEntryPoint
@@ -62,6 +68,7 @@ class QuoteFragment : Fragment() {
     private var quoteShown = false
     private var isBookMarked = false
     private lateinit var binding: FragmentQuoteBinding
+    private var copyOnLongPress: Runnable? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -70,6 +77,11 @@ class QuoteFragment : Fragment() {
     ): View {
         binding = FragmentQuoteBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+    override fun onDestroyView() {
+        copyOnLongPress?.let { binding.quoteCard.removeCallbacks(it) }
+        super.onDestroyView()
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -145,6 +157,28 @@ class QuoteFragment : Fragment() {
         }
 
         // detect left swipe on the "quote card".
+        var downX = 0f
+        var downY = 0f
+        var dragged = false
+        val touchSlop = ViewConfiguration.get(requireContext()).scaledTouchSlop
+        val longPressMs = ViewConfiguration.getLongPressTimeout().toLong()
+        val copyOnLongPress = Runnable {
+            val currentQuote = quote ?: return@Runnable
+            if (dragged) return@Runnable
+            val clipboard = requireContext()
+                .getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            clipboard.setPrimaryClip(
+                ClipData.newPlainText(
+                    "quote",
+                    "\"${currentQuote.quote}\"\n\n- ${currentQuote.author}"
+                )
+            )
+            binding.quoteCard.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
+            if ((activity as QuotesActivity).atHome) {
+                Snackbar.make(view, "Quote Copied!", Snackbar.LENGTH_SHORT).show()
+            }
+        }
+        this.copyOnLongPress = copyOnLongPress
         binding.quoteCard.setOnTouchListener(
             View.OnTouchListener { v, event ->
                 // variables to store current configuration of quote card.
@@ -153,7 +187,20 @@ class QuoteFragment : Fragment() {
                 val cardStart = (displayMetrics.widthPixels.toFloat() / 2) - (cardWidth / 2)
 
                 when (event.action) {
+                    MotionEvent.ACTION_DOWN -> {
+                        downX = event.rawX
+                        downY = event.rawY
+                        dragged = false
+                        v.removeCallbacks(copyOnLongPress)
+                        v.postDelayed(copyOnLongPress, longPressMs)
+                    }
+
+                    MotionEvent.ACTION_CANCEL -> {
+                        v.removeCallbacks(copyOnLongPress)
+                    }
+
                     MotionEvent.ACTION_UP -> {
+                        v.removeCallbacks(copyOnLongPress)
                         var currentX = v.x
                         v.animate()
                             .x(cardStart)
@@ -164,7 +211,7 @@ class QuoteFragment : Fragment() {
                                         delay(100)
                                         // check if the swipe distance was more than
                                         // minimum swipe required to load a new quote
-                                        if (currentX < MIN_SWIPE_DISTANCE) {
+                                        if (cardStart - currentX >= MIN_SWIPE_DISTANCE) {
                                             // Load a new quote if swiped adequately
                                             viewModel.getRandomQuote()
                                             currentX = 0f
@@ -176,6 +223,13 @@ class QuoteFragment : Fragment() {
                     }
 
                     MotionEvent.ACTION_MOVE -> {
+                        if (
+                            abs(event.rawX - downX) > touchSlop ||
+                            abs(event.rawY - downY) > touchSlop
+                        ) {
+                            dragged = true
+                            v.removeCallbacks(copyOnLongPress)
+                        }
                         // get the new co-ordinate of X-axis
                         val newX = event.rawX
 
@@ -184,13 +238,12 @@ class QuoteFragment : Fragment() {
                         // Detailed explanation at: https://genicsblog.com/swipe-animation-on-a-cardview-android
                         if (newX - cardWidth < cardStart) {
                             Log.d("Values", "$cardStart --- $newX ---- ${displayMetrics.widthPixels.toFloat()}  ---- ${newX - (cardWidth / 2)}")
+                            val nextX = min(cardStart, newX - (cardWidth / 2))
                             v.animate()
-                                .x(
-                                    min(cardStart, newX - (cardWidth / 2))
-                                )
+                                .x(nextX)
                                 .setDuration(0)
                                 .start()
-                            if (v.x < MIN_SWIPE_DISTANCE) binding.extraText.text =
+                            if (cardStart - nextX >= MIN_SWIPE_DISTANCE) binding.extraText.text =
                                 getString(R.string.release)
                             else binding.extraText.text = getString(R.string.info)
                         }
