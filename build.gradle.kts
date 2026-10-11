@@ -8,7 +8,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("com.android.tools.build:gradle:8.2.2")
+        classpath("com.android.tools.build:gradle:8.13.2")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version")
         classpath("androidx.navigation:navigation-safe-args-gradle-plugin:2.8.3")
         classpath("com.google.dagger:hilt-android-gradle-plugin:$hiltVersion")
@@ -29,5 +29,5 @@ allprojects {
 }
 
 tasks.register(name = "type", type = Delete::class) {
-    delete(rootProject.buildDir)
+    delete(rootProject.layout.buildDirectory)
 }

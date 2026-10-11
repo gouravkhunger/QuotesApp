@@ -7,8 +7,7 @@ plugins {
 }
 
 android {
-    compileSdk = 34
-    buildToolsVersion = "30.0.3"
+    compileSdk = 36
     namespace = "com.github.gouravkhunger.quotesapp"
 
     signingConfigs {
@@ -22,7 +21,7 @@ android {
 
     defaultConfig {
         minSdk = 23
-        targetSdk = 34
+        targetSdk = 36
         versionCode = 6
         versionName = "2.1.3"
 
@@ -48,8 +47,13 @@ android {
         }
     }
 
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
 
     buildFeatures {

@@ -35,15 +35,12 @@
         <item name="colorSecondary">@color/deep_blue</item>
         <item name="colorSecondaryVariant">@color/deep_blue</item>
         <item name="colorOnSecondary">@android:color/black</item>
-        <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
-        <!-- Customize your theme here. -->
+        <item name="android:windowLightStatusBar">false</item>
     </style>
-    
+
     <style name="SplashScreenTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="android:windowBackground">@drawable/splash_cover</item>
-        <item name="android:windowTranslucentStatus">true</item>
-        <item name="android:windowTranslucentNavigation">true</item>
     </style>
 
     <style name="fontJosefinSans">

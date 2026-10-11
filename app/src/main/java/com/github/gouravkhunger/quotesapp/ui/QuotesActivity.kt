@@ -38,6 +38,10 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 import androidx.navigation.Navigation
 import com.github.gouravkhunger.quotesapp.R
 import com.github.gouravkhunger.quotesapp.databinding.ActivityQuotesBinding
@@ -63,47 +67,41 @@ class QuotesActivity : AppCompatActivity() {
     private lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        setTheme(R.style.Theme_QuotesApp)
         super.onCreate(savedInstanceState)
+        WindowCompat.setDecorFitsSystemWindows(window, false)
         binding = ActivityQuotesBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, windowInsets ->
+            val bars = windowInsets.getInsets(
+                WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout()
+            )
+            view.updatePadding(bars.left, bars.top, bars.right, bars.bottom)
+            windowInsets
+        }
 
-        // logic to switch between fragments
+        val navController = Navigation.findNavController(binding.quotesNavHostFragment)
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            atHome = destination.id == R.id.quoteFragment
+            binding.settingsBtn.visibility = if (atHome) View.VISIBLE else View.GONE
+            binding.myBookmarksImgBtn.visibility = if (atHome) View.VISIBLE else View.GONE
+            binding.backToQuotePage.visibility = if (atHome) View.GONE else View.VISIBLE
+            binding.activityTitle.setText(if (atHome) R.string.app_name else R.string.myBookMarks)
+        }
+
         binding.myBookmarksImgBtn.setOnClickListener {
-            val action = QuoteFragmentDirections
-                .actionQuoteFragmentToBookmarkFragment()
-            val navController = Navigation.findNavController(binding.quotesNavHostFragment)
-
-            navController.navigate(action)
-            it.visibility = View.GONE
-
-            with(binding) {
-                settingsBtn.visibility = View.GONE
-                backToQuotePage.visibility = View.VISIBLE
-                activityTitle.text = resources.getText(R.string.myBookMarks)
-            }
-
-            atHome = false
+            navController.navigate(
+                QuoteFragmentDirections.actionQuoteFragmentToBookmarkFragment()
+            )
         }
 
         binding.backToQuotePage.setOnClickListener {
-            super.onBackPressed()
-            it.visibility = View.GONE
-
-            with(binding) {
-                settingsBtn.visibility = View.VISIBLE
-                myBookmarksImgBtn.visibility = View.VISIBLE
-                activityTitle.text = resources.getText(R.string.app_name)
-            }
-
-            atHome = true
+            onBackPressedDispatcher.onBackPressed()
         }
 
         binding.settingsBtn.setOnClickListener {
             SettingsFragment().show(supportFragmentManager, SettingsFragment.TAG)
         }
-
-        // Update theme once everything is set up
-        setTheme(R.style.Theme_QuotesApp)
 
         requestPermissionLauncher = registerForActivityResult(
             ActivityResultContracts.RequestPermission(),
@@ -154,22 +152,5 @@ class QuotesActivity : AppCompatActivity() {
                 }
             })
         appUpdaterUtils.start()
-    }
-
-    // implementation to handle error cases regarding navigation icons
-    // this function updates the icons and sets variables according
-    // to how navigation was carried out
-    override fun onBackPressed() {
-        super.onBackPressed()
-        if (!atHome) {
-            with(binding) {
-                settingsBtn.visibility = View.VISIBLE
-                backToQuotePage.visibility = View.GONE
-                myBookmarksImgBtn.visibility = View.VISIBLE
-                activityTitle.text = resources.getText(R.string.app_name)
-            }
-
-            atHome = true
-        }
     }
 }
